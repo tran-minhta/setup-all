@@ -41,13 +41,14 @@ grep -q '.cargo/bin' ~/.bashrc 2>/dev/null || echo 'export PATH="$HOME/.cargo/bi
 echo "[6/10] Installing Go..."
 GO_VERSION=$(curl -s https://go.dev/VERSION?m=text | head -n 1 | sed 's/go//')
 wget -q "https://dl.google.com/go/go${GO_VERSION}.linux-arm64.tar.gz" -O /tmp/go.tar.gz
-rm -rf $PREFIX/go && tar -C $PREFIX -xzf /tmp/go.tar.gz && rm /tmp/go.tar.gz
+rm -rf "$PREFIX/go" && tar -C "$PREFIX" -xzf /tmp/go.tar.gz && rm /tmp/go.tar.gz
 grep -q '$PREFIX/go/bin' ~/.bashrc 2>/dev/null || echo 'export PATH="$PATH:$PREFIX/go/bin"' >> ~/.bashrc
 
 # 7. NVM + Node.js
 echo "[7/10] Installing NVM + Node.js..."
+LATEST_NVM=$(curl -s https://api.github.com/repos/nvm-sh/nvm/releases/latest | grep '"tag_name"' | sed -E 's/.*"tag_name": *"v?([^"]+)".*/\1/')
 if [ ! -d "$HOME/.nvm" ]; then
-    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh | bash
+    curl -o- "https://raw.githubusercontent.com/nvm-sh/nvm/v${LATEST_NVM}/install.sh" | bash
 fi
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
@@ -70,7 +71,8 @@ pip3 install --user yt-dlp || true
 
 # 10. Common aliases
 echo "[10/10] Setting up aliases..."
-cat << 'EOF' > ~/.commonrc
+if [ ! -f ~/.commonrc ]; then
+    cat << 'EOF' > ~/.commonrc
 # Anything - Termux aliases
 export PATH="$HOME/.local/bin:$HOME/.cargo/bin:$HOME/.bun/bin:$PATH"
 
@@ -85,6 +87,24 @@ alias act='source ./.venv/bin/activate'
 alias deact='deactivate'
 alias uv-pip='uv pip install'
 EOF
+else
+    grep -q '# Anything - Termux aliases' ~/.commonrc 2>/dev/null || cat << 'EOF' >> ~/.commonrc
+
+# Anything - Termux aliases
+export PATH="$HOME/.local/bin:$HOME/.cargo/bin:$HOME/.bun/bin:$PATH"
+
+alias cat='bat --paging=never'
+alias ls='ls --color=auto'
+alias ll='ls -lh'
+alias gco='git checkout'
+alias gs='git status'
+alias gp='git push'
+alias myenv='uv init . && uv venv'
+alias act='source ./.venv/bin/activate'
+alias deact='deactivate'
+alias uv-pip='uv pip install'
+EOF
+fi
 
 # Ensure .bashrc sources .commonrc
 if [ -f ~/.bashrc ] && ! grep -q 'source ~/.commonrc' ~/.bashrc; then

@@ -1,11 +1,19 @@
+[build-system]
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
 [project]
 name = "anything"
 version = "0.1.0"
 description = "Cross-platform development environment setup tool"
 readme = "README.md"
 requires-python = ">=3.13"
+license = {text = "MIT"}
 
 
 dependencies = [
 	"PyQt6>=6.6.0",
 ]
+
+[project.scripts]
+anything = "gui:main"

@@ -1,4 +1,5 @@
 #!/bin/bash
+set -e
 
 echo "Anything - Proot-distro (Ubuntu) Setup"
 echo "======================================="
@@ -86,7 +87,8 @@ grep -q '/usr/local/go/bin' ~/.bashrc 2>/dev/null || echo 'export PATH="$PATH:/u
 echo "[8/12] Installing NVM + Node.js..."
 if [ ! -d "$HOME/.nvm" ]; then
     (
-        curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh | bash
+        NVM_LATEST=$(curl -s https://api.github.com/repos/nvm-sh/nvm/releases/latest | grep '"tag_name"' | sed -E 's/.*"tag_name": *"v?([^"]+)".*/\1/')
+        curl -o- "https://raw.githubusercontent.com/nvm-sh/nvm/v${NVM_LATEST}/install.sh" | bash
         export NVM_DIR="$HOME/.nvm"
         [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
         nvm install --lts
@@ -131,7 +133,8 @@ pip3 install --user yt-dlp 2>/dev/null || true
 # Setup aliases
 echo ""
 echo "Setting up aliases..."
-cat << 'EOF' > ~/.commonrc
+if [ ! -f ~/.commonrc ]; then
+    cat << 'EOF' > ~/.commonrc
 # Anything - Proot-distro (Ubuntu) aliases
 export PATH="$HOME/.local/bin:$HOME/.cargo/bin:$HOME/.bun/bin:$HOME/.deno/bin:$PATH"
 
@@ -151,6 +154,29 @@ alias act='source ./.venv/bin/activate'
 alias deact='deactivate'
 alias uv-pip='uv pip install'
 EOF
+else
+    grep -q '# Anything - Proot-distro' ~/.commonrc 2>/dev/null || cat << 'EOF' >> ~/.commonrc
+
+# Anything - Proot-distro (Ubuntu) aliases
+export PATH="$HOME/.local/bin:$HOME/.cargo/bin:$HOME/.bun/bin:$HOME/.deno/bin:$PATH"
+
+# Desktop-like aliases
+alias cat='bat --paging=never'
+alias ls='ls --color=auto'
+alias ll='ls -lh'
+
+# Git aliases
+alias gco='git checkout'
+alias gs='git status'
+alias gp='git push'
+
+# Python aliases
+alias myenv='uv init . && uv venv'
+alias act='source ./.venv/bin/activate'
+alias deact='deactivate'
+alias uv-pip='uv pip install'
+EOF
+fi
 
 # Ensure .bashrc sources .commonrc
 if [ -f ~/.bashrc ] && ! grep -q 'source ~/.commonrc' ~/.bashrc 2>/dev/null; then

@@ -18,14 +18,25 @@ def is_termux() -> bool:
 
 def is_proot() -> bool:
     """Detect proot-distro environment (Ubuntu/Debian inside Termux)."""
-    if not is_termux():
-        return False
     try:
         with open("/proc/version", "r") as f:
-            return "proot" in f.read().lower()
+            if "proot" in f.read().lower():
+                return True
     except (FileNotFoundError, PermissionError):
         pass
-    return bool(os.environ.get("PROOT_DISTRO_NAME"))
+    if os.environ.get("PROOT_DISTRO_NAME"):
+        return True
+    if is_termux():
+        return False
+    if os.path.exists("/etc/os-release"):
+        try:
+            with open("/etc/os-release", "r") as f:
+                content = f.read()
+                if any(d in content for d in ("Ubuntu", "Debian")) and os.getuid() == 0:
+                    return True
+        except (FileNotFoundError, PermissionError):
+            pass
+    return False
 
 
 class Installer:
@@ -272,6 +283,9 @@ class Installer:
             output_queue: queue.Queue = queue.Queue()
 
             def _reader():
+                if process.stdout is None:
+                    output_queue.put(("done", None))
+                    return
                 buf = b""
                 try:
                     while True:

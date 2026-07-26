@@ -7,14 +7,16 @@ from installer import Installer, is_termux
 def run_cli_mode():
     installer = Installer()
     all_pkgs = installer.get_all_packages()
-    termux_pkgs = [p for p in all_pkgs if "termux" in p.get("install", {})]
+    platform_key = installer.platform_key
+    compatible_pkgs = [p for p in all_pkgs if platform_key in p.get("install", {})]
 
-    print(f"\nAnything Setup Tool - Termux Mode")
-    print(f"Detected {len(termux_pkgs)} packages available for Termux\n")
+    mode_name = {"termux": "Termux", "linux": "Linux", "darwin": "macOS", "win32": "Windows"}.get(platform_key, platform_key)
+    print(f"\nAnything Setup Tool - CLI Mode ({mode_name})")
+    print(f"Detected {len(compatible_pkgs)} packages available for {mode_name}\n")
 
     categories = [c for c in installer.get_categories() if c.get("packages")]
     for cat in categories:
-        pkgs = [p for p in cat["packages"] if "termux" in p.get("install", {})]
+        pkgs = [p for p in cat["packages"] if platform_key in p.get("install", {})]
         if pkgs:
             print(f"[{cat['id']}] {cat['name']} ({len(pkgs)} packages)")
             for p in pkgs:
@@ -28,7 +30,7 @@ def run_cli_mode():
         return
 
     if selected.lower() == "all":
-        pkg_ids = [p["id"] for p in termux_pkgs]
+        pkg_ids = [p["id"] for p in compatible_pkgs]
     else:
         pkg_ids = [s.strip() for s in selected.split(",") if s.strip()]
 
@@ -293,6 +295,8 @@ def run_gui_mode():
             return QSize(200, 44)
 
     class PackageCard(QFrame):
+        stateChanged = pyqtSignal()
+
         def __init__(self, pkg, installed, parent=None):
             super().__init__(parent)
             self.pkg = pkg
@@ -319,6 +323,7 @@ def run_gui_mode():
             self.checkbox = QCheckBox()
             self.checkbox.setChecked(False)
             self.checkbox.setFixedSize(18, 18)
+            self.checkbox.stateChanged.connect(lambda: self.stateChanged.emit())
             layout.addWidget(self.checkbox, 0, Qt.AlignmentFlag.AlignVCenter)
 
             info_col = QVBoxLayout()
@@ -437,7 +442,7 @@ def run_gui_mode():
                 gl = QVBoxLayout(grp)
                 gl.setSpacing(8)
                 inputs = {}
-                for plat in ["linux", "darwin", "win32"]:
+                for plat in ["linux", "darwin", "win32", "termux"]:
                     row = QHBoxLayout()
                     row.setSpacing(8)
                     lbl = QLabel(f"{plat}:")
@@ -874,6 +879,7 @@ def run_gui_mode():
                 installed = self.installer.is_installed(pkg["id"])
                 card = PackageCard(pkg, installed)
                 card.checkbox.setChecked(False)
+                card.stateChanged.connect(self._update_status)
                 self.cards[pkg["id"]] = card
                 cat_layout.addWidget(card)
             cat_group.setLayout(cat_layout)
@@ -1056,7 +1062,10 @@ def run_gui_mode():
                 self._on_manage_changed()
 
         def _on_manage_changed(self):
+            saved_password = self.installer._sudo_password
             self.installer = Installer()
+            if saved_password:
+                self.installer.set_sudo_password(saved_password)
             self._reload_manage()
             self._load_packages()
 
@@ -1071,7 +1080,10 @@ def run_gui_mode():
                     event.ignore()
                     return
                 self.install_thread.stop()
-                self.install_thread.wait(3000)
+                self.install_thread.wait(5000)
+                if self.install_thread.isRunning():
+                    self.install_thread.terminate()
+                    self.install_thread.wait(2000)
             event.accept()
 
     app = QApplication(sys.argv)
@@ -1085,7 +1097,12 @@ def main():
     if is_termux():
         run_cli_mode()
     else:
-        run_gui_mode()
+        try:
+            from PyQt6.QtWidgets import QApplication
+            run_gui_mode()
+        except ImportError:
+            print("PyQt6 not found. Falling back to CLI mode...")
+            run_cli_mode()
 
 
 if __name__ == "__main__":

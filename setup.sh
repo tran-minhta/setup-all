@@ -73,7 +73,9 @@ fi
 grep -q ".cargo/bin" ~/.commonrc || echo 'export PATH="$HOME/.cargo/bin:$PATH"' >> ~/.commonrc
 
 install_go() {
-    wget "https://dl.google.com/go/go${LATEST_GO}.linux-arm64.tar.gz" -O /tmp/go.tar.gz
+    ARCH=$(uname -m)
+    if [ "$ARCH" = "aarch64" ]; then GO_ARCH="arm64"; elif [ "$ARCH" = "x86_64" ]; then GO_ARCH="amd64"; else GO_ARCH="$ARCH"; fi
+    wget "https://dl.google.com/go/go${LATEST_GO}.linux-${GO_ARCH}.tar.gz" -O /tmp/go.tar.gz
     sudo rm -rf /usr/local/go && sudo tar -C /usr/local -xzf /tmp/go.tar.gz
 }
 
@@ -163,8 +165,10 @@ grep -q ".local/bin" ~/.commonrc || echo 'export PATH="$HOME/.local/bin:$PATH"' 
 
 # 7. NEOVIM
 install_nvim() {
-    wget -qO /tmp/nvim.tar.gz https://github.com/neovim/neovim/releases/latest/download/nvim-linux-arm64.tar.gz
-    sudo tar -C /opt -xzf /tmp/nvim.tar.gz && sudo ln -sf /opt/nvim-linux-arm64/bin/nvim /usr/local/bin/nvim
+    ARCH=$(uname -m)
+    if [ "$ARCH" = "aarch64" ]; then NVIM_ARCH="arm64"; elif [ "$ARCH" = "x86_64" ]; then NVIM_ARCH="x86_64"; else NVIM_ARCH="$ARCH"; fi
+    wget -qO /tmp/nvim.tar.gz "https://github.com/neovim/neovim/releases/latest/download/nvim-linux-${NVIM_ARCH}.tar.gz"
+    sudo tar -C /opt -xzf /tmp/nvim.tar.gz && sudo ln -sf "/opt/nvim-linux-${NVIM_ARCH}/bin/nvim" /usr/local/bin/nvim
 }
 
 if ! command -v nvim &> /dev/null; then
@@ -187,14 +191,12 @@ if [ ! -d "$HOME/.config/nvim" ]; then
     rm -rf "$HOME/.config/nvim/.git"
 fi
 
-# 9. ALIAS THÔNG MINH (Đặt vào .commonrc)
-cat << 'EOF' > ~/.commonrc
-# --- CẤU HÌNH DÙNG CHUNG ---
-export PATH="$HOME/.cargo/bin:$HOME/.bun/bin:$PATH"
-export PATH="$PATH:/usr/local/go/bin"
+# 9. ALIAS THÔNG MINH (Append vào .commonrc — KHÔNG overwrite vì đã có PATH từ bước 3-8)
+grep -q '# Alias an toàn' ~/.commonrc 2>/dev/null || cat << 'EOF' >> ~/.commonrc
 
+# --- ALIAS ---
 # Alias an toàn (bat --paging=never giúp tránh bị treo như cat cũ)
-alias cat='batcat --paging=never'
+alias cat='bat --paging=never'
 alias myenv='uv init . && uv venv'
 alias act='source ./.venv/bin/activate'
 alias deact='deactivate'

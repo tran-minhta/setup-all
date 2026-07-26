@@ -7,7 +7,10 @@ IS_PROOT=false
 if [ -n "$TERMUX_VERSION" ] || [[ "$PREFIX" == *"com.termux"* ]]; then
     IS_TERMUX=true
 fi
-if [ -f /etc/os-release ] && grep -q "Ubuntu" /etc/os-release 2>/dev/null && [ -d /data/data/com.termux ]; then
+if [ -f /proc/version ] && grep -qi "proot" /proc/version 2>/dev/null; then
+    IS_PROOT=true
+    IS_TERMUX=false
+elif [ -n "$PROOT_DISTRO_NAME" ]; then
     IS_PROOT=true
     IS_TERMUX=false
 fi
@@ -80,7 +83,9 @@ for task in "${queue[@]}"; do
                 for rc in ~/.bashrc ~/.zshrc; do
                     [ -f "$rc" ] && ! grep -q "source ~/.commonrc" "$rc" 2>/dev/null && echo "[ -f ~/.commonrc ] && source ~/.commonrc" >> "$rc"
                 done
-                cat << 'EOF' > ~/.commonrc
+                grep -q '# Anything aliases' ~/.commonrc 2>/dev/null || cat << 'EOF' >> ~/.commonrc
+
+# Anything aliases
 alias cat='bat --paging=never'
 alias ls='ls --color=auto'
 alias ll='ls -lh'
@@ -97,7 +102,9 @@ EOF
                 for rc in ~/.bashrc; do
                     if ! grep -q "source ~/.commonrc" "$rc" 2>/dev/null; then echo "[ -f ~/.commonrc ] && source ~/.commonrc" >> "$rc"; fi
                 done
-                cat << 'EOF' > ~/.commonrc
+                grep -q '# Anything aliases' ~/.commonrc 2>/dev/null || cat << 'EOF' >> ~/.commonrc
+
+# Anything aliases
 alias cat='bat --paging=never'
 alias ls='ls --color=auto'
 alias ll='ls -lh'
@@ -111,7 +118,9 @@ EOF
                 for rc in ~/.bashrc ~/.zshrc; do
                     if ! grep -q "source ~/.commonrc" "$rc"; then echo "[ -f ~/.commonrc ] && source ~/.commonrc" >> "$rc"; fi
                 done
-                cat << 'EOF' > ~/.commonrc
+                grep -q '# Anything aliases' ~/.commonrc 2>/dev/null || cat << 'EOF' >> ~/.commonrc
+
+# Anything aliases
 alias cat='batcat --paging=never'
 alias ls='eza --icons'
 alias ll='eza -lh --icons'
@@ -148,7 +157,8 @@ EOF
             ;;
         "NODE")
             if [ ! -d "$HOME/.nvm" ]; then
-                curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh | bash
+                NVM_LATEST=$(curl -s https://api.github.com/repos/nvm-sh/nvm/releases/latest | grep '"tag_name"' | sed -E 's/.*"tag_name": *"v?([^"]+)".*/\1/')
+                curl -o- "https://raw.githubusercontent.com/nvm-sh/nvm/v${NVM_LATEST}/install.sh" | bash
             fi
             ;;
         "NVIM")
@@ -158,8 +168,9 @@ EOF
                 elif [ "$IS_TERMUX" = true ]; then
                     pkg install -y neovim
                 else
-                    wget -qO /tmp/nvim.tar.gz https://github.com/neovim/neovim/releases/latest/download/nvim-linux-arm64.tar.gz
-                    sudo tar -C /opt -xzf /tmp/nvim.tar.gz && sudo ln -sf /opt/nvim-linux-arm64/bin/nvim /usr/local/bin/nvim
+                    NVIM_ARCH=$(uname -m | sed 's/aarch64/arm64/;s/x86_64/x86_64/')
+                    wget -qO /tmp/nvim.tar.gz "https://github.com/neovim/neovim/releases/latest/download/nvim-linux-${NVIM_ARCH}.tar.gz"
+                    sudo tar -C /opt -xzf /tmp/nvim.tar.gz && sudo ln -sf "/opt/nvim-linux-${NVIM_ARCH}/bin/nvim" /usr/local/bin/nvim
                 fi
             fi
             if [ ! -d "$HOME/.config/nvim" ]; then
