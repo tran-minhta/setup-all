@@ -19,28 +19,33 @@ echo "[2/10] Installing base packages..."
 pkg install -y zsh tmux fzf bat eza stow curl git build-essential unzip wget \
     python openssh nano htop tree p7zip gnupg sqlite nmap
 
-# 3. Cai dat UV va pipx
-echo "[3/10] Installing UV and pipx..."
+# 3. Cai dat UV
+echo "[3/10] Installing UV..."
 curl -LsSf https://astral.sh/uv/install.sh | sh
-pip install pipx
-pipx ensurepath
+export PATH="$HOME/.local/bin:$HOME/.cargo/bin:$PATH"
 
-# 4. Rust
-echo "[4/10] Installing Rust..."
+# 4. Cai dat pipx
+echo "[4/10] Installing pipx..."
+pip3 install --user pipx || pip3 install pipx
+pipx ensurepath
+export PATH="$HOME/.local/bin:$PATH"
+
+# 5. Rust
+echo "[5/10] Installing Rust..."
 if ! command -v cargo &>/dev/null; then
     curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
 fi
 grep -q '.cargo/bin' ~/.bashrc 2>/dev/null || echo 'export PATH="$HOME/.cargo/bin:$PATH"' >> ~/.bashrc
 
-# 5. Golang
-echo "[5/10] Installing Go..."
+# 6. Golang
+echo "[6/10] Installing Go..."
 GO_VERSION=$(curl -s https://go.dev/VERSION?m=text | head -n 1 | sed 's/go//')
 wget -q "https://dl.google.com/go/go${GO_VERSION}.linux-arm64.tar.gz" -O /tmp/go.tar.gz
 rm -rf $PREFIX/go && tar -C $PREFIX -xzf /tmp/go.tar.gz && rm /tmp/go.tar.gz
 grep -q '$PREFIX/go/bin' ~/.bashrc 2>/dev/null || echo 'export PATH="$PATH:$PREFIX/go/bin"' >> ~/.bashrc
 
-# 6. NVM + Node.js
-echo "[6/10] Installing NVM + Node.js..."
+# 7. NVM + Node.js
+echo "[7/10] Installing NVM + Node.js..."
 if [ ! -d "$HOME/.nvm" ]; then
     curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh | bash
 fi
@@ -51,27 +56,23 @@ if ! command -v node &>/dev/null; then
     nvm use --lts
 fi
 
-# 7. Bun
-echo "[7/10] Installing Bun..."
+# 8. Bun
+echo "[8/10] Installing Bun..."
 if ! command -v bun &>/dev/null; then
     curl -fsSL https://bun.sh/install | bash
 fi
 grep -q '.bun/bin' ~/.bashrc 2>/dev/null || echo 'export PATH="$HOME/.bun/bin:$PATH"' >> ~/.bashrc
 
-# 8. CLI tools
-echo "[8/10] Installing CLI tools..."
-pkg install -y ripgrep fd glow imagemagick ffmpeg yt-dlp || true
-pip install yt-dlp || true
-
-# 9. Media tools
-echo "[9/10] Installing media tools..."
-pkg install -y ffmpeg imagemagick || true
+# 9. CLI tools
+echo "[9/10] Installing CLI tools..."
+pkg install -y ripgrep fd glow imagemagick ffmpeg || true
+pip3 install --user yt-dlp || true
 
 # 10. Common aliases
 echo "[10/10] Setting up aliases..."
 cat << 'EOF' > ~/.commonrc
 # Anything - Termux aliases
-export PATH="$HOME/.cargo/bin:$HOME/.bun/bin:$PATH"
+export PATH="$HOME/.local/bin:$HOME/.cargo/bin:$HOME/.bun/bin:$PATH"
 
 alias cat='bat --paging=never'
 alias ls='ls --color=auto'
@@ -83,11 +84,6 @@ alias myenv='uv init . && uv venv'
 alias act='source ./.venv/bin/activate'
 alias deact='deactivate'
 alias uv-pip='uv pip install'
-
-# Source commonrc from bashrc/zshrc
-if [ -f ~/.commonrc ]; then
-    [ -f ~/.bashrc ] && grep -q 'source ~/.commonrc' ~/.bashrc 2>/dev/null || echo '[ -f ~/.commonrc ] && source ~/.commonrc' >> ~/.bashrc
-fi
 EOF
 
 # Ensure .bashrc sources .commonrc
