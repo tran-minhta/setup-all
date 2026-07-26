@@ -16,13 +16,27 @@ def is_termux() -> bool:
     )
 
 
+def is_proot() -> bool:
+    """Detect proot-distro environment (Ubuntu/Debian inside Termux)."""
+    if not is_termux():
+        return False
+    try:
+        with open("/proc/version", "r") as f:
+            return "proot" in f.read().lower()
+    except (FileNotFoundError, PermissionError):
+        pass
+    return bool(os.environ.get("PROOT_DISTRO_NAME"))
+
+
 class Installer:
     def __init__(self, json_path: str = None):
         if json_path is None:
             json_path = str(Path(__file__).parent / "packages.json")
         self.json_path = json_path
         self.system = platform.system().lower()
-        if is_termux():
+        if is_proot():
+            self.platform_key = "linux"
+        elif is_termux():
             self.platform_key = "termux"
         elif self.system == "linux":
             self.platform_key = "linux"

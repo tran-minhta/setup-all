@@ -1,13 +1,25 @@
 #!/bin/bash
 set -e
 
-# Detect Termux
+# Detect environment
 IS_TERMUX=false
+IS_PROOT=false
 if [ -n "$TERMUX_VERSION" ] || [[ "$PREFIX" == *"com.termux"* ]]; then
     IS_TERMUX=true
 fi
+if [ -f /etc/os-release ] && grep -q "Ubuntu" /etc/os-release 2>/dev/null && [ -d /data/data/com.termux ]; then
+    IS_PROOT=true
+    IS_TERMUX=false
+fi
 
-if [ "$IS_TERMUX" = true ]; then
+# Menu
+if [ "$IS_PROOT" = true ]; then
+    echo "Anything - Proot-distro (Ubuntu) Setup"
+    echo "======================================="
+    echo "Chon goi muon cai (nhap so, cach nhau bang dau cach, chon '0' de cai tat ca):"
+    echo "1) Co ban | 2) Rust | 3) Golang | 4) Node.js | 5) Neovim | 6) UV | 7) ZSH | 8) CLI Tools | 9) Database | 0) TAT CA"
+    read -p "Lua chon cua ban (Enter de cai tat ca): " choices
+elif [ "$IS_TERMUX" = true ]; then
     echo "Anything - Termux Setup"
     echo "======================="
     echo "Chon goi muon cai (nhap so, cach nhau bang dau cach, chon '0' de cai tat ca):"
@@ -26,14 +38,22 @@ if [ -z "$choices" ]; then choices="0"; fi
 # 2. Hang doi
 queue=()
 if [[ $choices == *"0"* ]]; then
-    if [ "$IS_TERMUX" = true ]; then
+    if [ "$IS_PROOT" = true ]; then
+        queue=("BASE" "RUST" "GO" "NODE" "NVIM" "UV" "ZSH" "CLI_TOOLS" "DATABASE")
+    elif [ "$IS_TERMUX" = true ]; then
         queue=("BASE" "RUST" "GO" "NODE" "NVIM" "UV" "ZSH" "CLI_TOOLS")
     else
         queue=("BASE" "RUST" "GO" "NODE" "NVIM" "TAILSCALE" "UV" "ZSH" "DOCKER")
     fi
 else
     for i in $choices; do
-        if [ "$IS_TERMUX" = true ]; then
+        if [ "$IS_PROOT" = true ]; then
+            case $i in
+                1) queue+=("BASE") ;; 2) queue+=("RUST") ;; 3) queue+=("GO") ;;
+                4) queue+=("NODE") ;; 5) queue+=("NVIM") ;; 6) queue+=("UV") ;;
+                7) queue+=("ZSH") ;; 8) queue+=("CLI_TOOLS") ;; 9) queue+=("DATABASE") ;;
+            esac
+        elif [ "$IS_TERMUX" = true ]; then
             case $i in
                 1) queue+=("BASE") ;; 2) queue+=("RUST") ;; 3) queue+=("GO") ;;
                 4) queue+=("NODE") ;; 5) queue+=("NVIM") ;; 6) queue+=("UV") ;;
@@ -54,7 +74,24 @@ for task in "${queue[@]}"; do
     echo "--- Dang xu ly: $task ---"
     case $task in
         "BASE")
-            if [ "$IS_TERMUX" = true ]; then
+            if [ "$IS_PROOT" = true ]; then
+                apt update -y && apt install -y zsh tmux fzf bat curl git build-essential unzip wget python3 python3-pip python3-venv nano htop tree p7zip-full gnupg sqlite3 nmap openssh-client stow jq ripgrep fd-find
+                touch ~/.commonrc
+                for rc in ~/.bashrc ~/.zshrc; do
+                    [ -f "$rc" ] && ! grep -q "source ~/.commonrc" "$rc" 2>/dev/null && echo "[ -f ~/.commonrc ] && source ~/.commonrc" >> "$rc"
+                done
+                cat << 'EOF' > ~/.commonrc
+alias cat='bat --paging=never'
+alias ls='ls --color=auto'
+alias ll='ls -lh'
+alias gco='git checkout'
+alias gs='git status'
+alias gp='git push'
+alias myenv='uv init . && uv venv'
+alias act='source ./.venv/bin/activate'
+alias deact='deactivate'
+EOF
+            elif [ "$IS_TERMUX" = true ]; then
                 pkg update -y && pkg install -y zsh tmux fzf bat eza stow curl git build-essential unzip wget python openssh
                 touch ~/.commonrc
                 for rc in ~/.bashrc; do
@@ -94,12 +131,16 @@ EOF
         "GO")
             if ! command -v go &> /dev/null; then
                 GO_VER=$(curl -s https://go.dev/VERSION?m=text | head -n 1 | sed 's/go//')
-                if [ "$IS_TERMUX" = true ]; then
-                    wget -q "https://dl.google.com/go/${GO_VER}.linux-arm64.tar.gz" -O /tmp/go.tar.gz
+                ARCH=$(uname -m)
+                if [ "$ARCH" = "aarch64" ]; then GO_ARCH="arm64"; elif [ "$ARCH" = "x86_64" ]; then GO_ARCH="amd64"; else GO_ARCH="$ARCH"; fi
+                wget -q "https://dl.google.com/go/${GO_VER}.linux-${GO_ARCH}.tar.gz" -O /tmp/go.tar.gz
+                if [ "$IS_PROOT" = true ]; then
+                    rm -rf /usr/local/go && tar -C /usr/local -xzf /tmp/go.tar.gz
+                    grep -q "/usr/local/go/bin" ~/.bashrc 2>/dev/null || echo 'export PATH="$PATH:/usr/local/go/bin"' >> ~/.bashrc
+                elif [ "$IS_TERMUX" = true ]; then
                     rm -rf $PREFIX/go && tar -C $PREFIX -xzf /tmp/go.tar.gz
                     grep -q '$PREFIX/go/bin' ~/.bashrc 2>/dev/null || echo 'export PATH="$PATH:$PREFIX/go/bin"' >> ~/.bashrc
                 else
-                    wget -q "https://dl.google.com/go/${GO_VER}.linux-arm64.tar.gz" -O /tmp/go.tar.gz
                     sudo rm -rf /usr/local/go && sudo tar -C /usr/local -xzf /tmp/go.tar.gz
                     grep -q "/usr/local/go/bin" ~/.bashrc 2>/dev/null || echo 'export PATH="$PATH:/usr/local/go/bin"' >> ~/.bashrc
                 fi
@@ -112,7 +153,9 @@ EOF
             ;;
         "NVIM")
             if ! command -v nvim &> /dev/null; then
-                if [ "$IS_TERMUX" = true ]; then
+                if [ "$IS_PROOT" = true ]; then
+                    apt install -y neovim
+                elif [ "$IS_TERMUX" = true ]; then
                     pkg install -y neovim
                 else
                     wget -qO /tmp/nvim.tar.gz https://github.com/neovim/neovim/releases/latest/download/nvim-linux-arm64.tar.gz
@@ -151,14 +194,22 @@ EOF
             sed -i 's/^plugins=.*/plugins=(git zsh-autosuggestions zsh-syntax-highlighting fzf)/g' ~/.zshrc
             ;;
         "CLI_TOOLS")
-            if [ "$IS_TERMUX" = true ]; then
+            if [ "$IS_PROOT" = true ]; then
+                apt install -y ripgrep fd-find glow imagemagick ffmpeg 2>/dev/null || true
+                pip3 install yt-dlp 2>/dev/null || true
+            elif [ "$IS_TERMUX" = true ]; then
                 pkg install -y ripgrep fd glow imagemagick ffmpeg yt-dlp || true
                 pip install yt-dlp || true
             fi
             ;;
+        "DATABASE")
+            if [ "$IS_PROOT" = true ]; then
+                apt install -y postgresql postgresql-client redis-server 2>/dev/null || true
+            fi
+            ;;
         "DOCKER")
-            if [ "$IS_TERMUX" = true ]; then
-                echo "Docker is not supported on Termux. Skipping."
+            if [ "$IS_PROOT" = true ] || [ "$IS_TERMUX" = true ]; then
+                echo "Docker is not supported on Termux/Proot. Skipping."
             else
                 if ! command -v docker &> /dev/null; then
                     sudo install -m 0755 -d /etc/apt/keyrings

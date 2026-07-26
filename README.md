@@ -94,11 +94,12 @@ Cài đặt **tất cả** package tự động, không cần chọn.
 
 ```
 Anything/
-├── gui.py              # GUI PyQt6 — giao diện đồ hoạ (Termux: CLI mode)
+├── gui.py              # GUI PyQt6 — giao diện đồ hoạ (Termux/Proot: CLI mode)
 ├── installer.py        # Backend — xử lý cài đặt, sudo, version check
 ├── packages.json       # Danh sách 184 packages, 21 categories
-├── setup.sh            # Cài tất cả (bash)
+├── setup.sh            # Cài tất cả (bash - desktop)
 ├── setup_termux.sh     # Cài tất cả cho Termux
+├── setup_proot.sh      # Cài tất cả cho proot-distro (Ubuntu)
 ├── Option.sh           # Chọn cài theo y muốn (bash)
 ├── pyproject.toml      # Python project config
 ├── .zshrc              # Cau hinh ZSH (oh-my-zsh + p10k + plugins)
@@ -152,6 +153,45 @@ Anything hỗ trợ **Termux (Android)** với ~90 packages compatible. Terminal
 - PostgreSQL, MySQL, Redis, MongoDB
 - Nginx, Caddy, Tailscale, Cloudflare Tunnel
 - Terraform, Ansible, Kubectl, Helm
+
+## Proot-distro Support
+
+Anything hỗ trợ **proot-distro** (Ubuntu chạy bên trong Termux). Proot-distro cho phép chạy Linux container đầy đủ với apt, sudo, systemd-like tools.
+
+### Cài đặt
+
+```bash
+# Cài proot-distro trên Termux
+pkg install proot-distro
+proot-distro install ubuntu
+
+# Vào Ubuntu container
+proot-distro login ubuntu
+
+# Clone và chạy setup
+git clone https://github.com/tran-minhta/Anything-termux.git
+cd Anything-termux
+chmod +x setup_proot.sh
+./setup_proot.sh
+```
+
+### Proot vs Termux
+
+| Feature | Termux | Proot-distro (Ubuntu) |
+|---------|--------|----------------------|
+| Package manager | `pkg install` | `apt install` |
+| sudo | Không có | Có (passwordless) |
+| systemd | Không | Không (proot limitation) |
+| Docker | Không | Không (proot limitation) |
+| PostgreSQL | Không | Có |
+| Redis | Không | Có |
+| Full Linux env | Không | Có |
+
+### Packages hỗ trợ trên Proot-distro
+
+Gần như **tất cả packages Linux** đều hỗ trợ, trừ:
+- Docker (proot không hỗ trợ kernel namespace)
+- Systemd services
 
 ## Cài đặt packages Python
 
