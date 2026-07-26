@@ -21,7 +21,21 @@ pkg install -y zsh tmux fzf bat eza stow curl git build-essential unzip wget \
 
 # 3. Cai dat UV
 echo "[3/10] Installing UV..."
-curl -LsSf https://astral.sh/uv/install.sh | sh
+if ! command -v uv &>/dev/null; then
+    curl -LsSf https://astral.sh/uv/install.sh | sh 2>/dev/null || {
+        echo "Official UV installer failed (no Android build). Trying musl fallback..."
+        UV_VER=$(curl -s https://api.github.com/repos/astral-sh/uv/releases/latest | grep '"tag_name"' | sed -E 's/.*"tag_name": *"v?([^"]+)".*/\1/')
+        mkdir -p "$HOME/.local/bin"
+        curl -sL "https://github.com/astral-sh/uv/releases/download/v${UV_VER}/uv-aarch64-unknown-linux-musl.tar.gz" | tar xz -C /tmp
+        mv /tmp/uv-aarch64-unknown-linux-musl/uv "$HOME/.local/bin/uv" 2>/dev/null || mv /tmp/uv "$HOME/.local/bin/uv" 2>/dev/null
+        rm -rf /tmp/uv-aarch64-unknown-linux-musl
+        if command -v "$HOME/.local/bin/uv" &>/dev/null; then
+            echo "UV installed via musl fallback"
+        else
+            echo "UV install failed - skipping (use pip instead)"
+        fi
+    }
+fi
 export PATH="$HOME/.local/bin:$HOME/.cargo/bin:$PATH"
 
 # 4. Cai dat pipx
