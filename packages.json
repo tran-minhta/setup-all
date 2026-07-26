@@ -11,12 +11,14 @@
           "install": {
             "linux": "sudo apt update && sudo apt install -y zsh tmux fzf bat eza stow curl git build-essential unzip wget apt-transport-https procps software-properties-common pipx && pipx install uv && pipx ensurepath",
             "darwin": "brew install zsh tmux fzf bat eza stow curl git wget && brew install pipx && pipx install uv && pipx ensurepath",
-            "win32": "winget install Git.Git --accept-source-agreements --accept-package-agreements && winget install pipx.pipx --accept-source-agreements --accept-package-agreements && pipx install uv && pipx ensurepath"
+            "win32": "winget install Git.Git --accept-source-agreements --accept-package-agreements && winget install pipx.pipx --accept-source-agreements --accept-package-agreements && pipx install uv && pipx ensurepath",
+            "termux": "pkg update -y && pkg install -y zsh tmux fzf bat eza stow curl git build-essential unzip wget && pip install uv pipx"
           },
           "check": {
             "linux": "command -v zsh && command -v git",
             "darwin": "command -v zsh && command -v git",
-            "win32": "where git"
+            "win32": "where git",
+            "termux": "command -v zsh && command -v git"
           },
           "post_install": {
             "linux": "if command -v batcat &>/dev/null && ! command -v bat &>/dev/null; then sudo ln -sf \"$(which batcat)\" /usr/local/bin/bat; fi"
@@ -72,12 +74,14 @@
           "install": {
             "linux": "sudo apt install -y tmux",
             "darwin": "brew install tmux",
-            "win32": "winget install tmux.tmux --accept-source-agreements --accept-package-agreements"
+            "win32": "winget install tmux.tmux --accept-source-agreements --accept-package-agreements",
+            "termux": "pkg install -y tmux"
           },
           "check": {
             "linux": "command -v tmux",
             "darwin": "command -v tmux",
-            "win32": "where tmux"
+            "win32": "where tmux",
+            "termux": "command -v tmux"
           }
         },
         {
@@ -87,12 +91,14 @@
           "install": {
             "linux": "sudo apt install -y curl",
             "darwin": "brew install curl",
-            "win32": "winget install cURL.cURL --accept-source-agreements --accept-package-agreements"
+            "win32": "winget install cURL.cURL --accept-source-agreements --accept-package-agreements",
+            "termux": "pkg install -y curl"
           },
           "check": {
             "linux": "command -v curl",
             "darwin": "command -v curl",
-            "win32": "where curl"
+            "win32": "where curl",
+            "termux": "command -v curl"
           }
         },
         {
@@ -102,12 +108,14 @@
           "install": {
             "linux": "sudo apt install -y wget",
             "darwin": "brew install wget",
-            "win32": "winget install GnuWin32.Wget --accept-source-agreements --accept-package-agreements"
+            "win32": "winget install GnuWin32.Wget --accept-source-agreements --accept-package-agreements",
+            "termux": "pkg install -y wget"
           },
           "check": {
             "linux": "command -v wget",
             "darwin": "command -v wget",
-            "win32": "where wget"
+            "win32": "where wget",
+            "termux": "command -v wget"
           }
         },
         {
@@ -117,12 +125,14 @@
           "install": {
             "linux": "sudo apt install -y stow",
             "darwin": "brew install stow",
-            "win32": "winget install gnuwin32.stow --accept-source-agreements --accept-package-agreements"
+            "win32": "winget install gnuwin32.stow --accept-source-agreements --accept-package-agreements",
+            "termux": "pkg install -y stow"
           },
           "check": {
             "linux": "command -v stow",
             "darwin": "command -v stow",
-            "win32": "where stow"
+            "win32": "where stow",
+            "termux": "command -v stow"
           }
         },
         {
@@ -132,12 +142,14 @@
           "install": {
             "linux": "sudo apt install -y tree",
             "darwin": "brew install tree",
-            "win32": "winget install GnuWin32.Tree --accept-source-agreements --accept-package-agreements"
+            "win32": "winget install GnuWin32.Tree --accept-source-agreements --accept-package-agreements",
+            "termux": "pkg install -y tree"
           },
           "check": {
             "linux": "command -v tree",
             "darwin": "command -v tree",
-            "win32": "where tree"
+            "win32": "where tree",
+            "termux": "command -v tree"
           }
         },
         {
@@ -147,12 +159,14 @@
           "install": {
             "linux": "sudo apt install -y htop",
             "darwin": "brew install htop",
-            "win32": "winget install htop.htop --accept-source-agreements --accept-package-agreements"
+            "win32": "winget install htop.htop --accept-source-agreements --accept-package-agreements",
+            "termux": "pkg install -y htop"
           },
           "check": {
             "linux": "command -v htop",
             "darwin": "command -v htop",
-            "win32": "where htop"
+            "win32": "where htop",
+            "termux": "command -v htop"
           }
         },
         {
@@ -177,12 +191,14 @@
           "install": {
             "linux": "sudo apt install -y nano",
             "darwin": "brew install nano",
-            "win32": "winget install GNU.Nano --accept-source-agreements --accept-package-agreements"
+            "win32": "winget install GNU.Nano --accept-source-agreements --accept-package-agreements",
+            "termux": "pkg install -y nano"
           },
           "check": {
             "linux": "command -v nano",
             "darwin": "command -v nano",
-            "win32": "where nano"
+            "win32": "where nano",
+            "termux": "command -v nano"
           }
         },
         {
@@ -192,12 +208,14 @@
           "install": {
             "linux": "sudo apt install -y openssh-client openssh-server",
             "darwin": "brew install openssh",
-            "win32": "winget install Microsoft.OpenSSH.Beta --accept-source-agreements --accept-package-agreements"
+            "win32": "winget install Microsoft.OpenSSH.Beta --accept-source-agreements --accept-package-agreements",
+            "termux": "pkg install -y openssh"
           },
           "check": {
             "linux": "command -v ssh",
             "darwin": "command -v ssh",
-            "win32": "where ssh"
+            "win32": "where ssh",
+            "termux": "command -v ssh"
           }
         },
         {
@@ -207,12 +225,14 @@
           "install": {
             "linux": "sudo apt install -y unzip",
             "darwin": "brew install unzip",
-            "win32": "winget install GnuWin32.UnZip --accept-source-agreements --accept-package-agreements"
+            "win32": "winget install GnuWin32.UnZip --accept-source-agreements --accept-package-agreements",
+            "termux": "pkg install -y unzip"
           },
           "check": {
             "linux": "command -v unzip",
             "darwin": "command -v unzip",
-            "win32": "where unzip"
+            "win32": "where unzip",
+            "termux": "command -v unzip"
           }
         },
         {
@@ -222,12 +242,14 @@
           "install": {
             "linux": "sudo apt install -y p7zip-full",
             "darwin": "brew install p7zip",
-            "win32": "winget install 7zip.7zip --accept-source-agreements --accept-package-agreements"
+            "win32": "winget install 7zip.7zip --accept-source-agreements --accept-package-agreements",
+            "termux": "pkg install -y p7zip"
           },
           "check": {
             "linux": "command -v 7z",
             "darwin": "command -v 7z",
-            "win32": "where 7z"
+            "win32": "where 7z",
+            "termux": "command -v 7z"
           }
         }
       ]
@@ -243,12 +265,14 @@
           "install": {
             "linux": "sudo apt install -y ripgrep || cargo install ripgrep",
             "darwin": "brew install ripgrep",
-            "win32": "winget install BurntSushi.ripgrep.MSVC --accept-source-agreements --accept-package-agreements"
+            "win32": "winget install BurntSushi.ripgrep.MSVC --accept-source-agreements --accept-package-agreements",
+            "termux": "pkg install -y ripgrep"
           },
           "check": {
             "linux": "command -v rg",
             "darwin": "command -v rg",
-            "win32": "where rg"
+            "win32": "where rg",
+            "termux": "command -v rg"
           }
         },
         {
@@ -258,12 +282,14 @@
           "install": {
             "linux": "sudo apt install -y fd-find || cargo install fd-find",
             "darwin": "brew install fd",
-            "win32": "winget install sharkdp.fd --accept-source-agreements --accept-package-agreements"
+            "win32": "winget install sharkdp.fd --accept-source-agreements --accept-package-agreements",
+            "termux": "pkg install -y fd"
           },
           "check": {
             "linux": "command -v fdfind || command -v fd",
             "darwin": "command -v fd",
-            "win32": "where fd"
+            "win32": "where fd",
+            "termux": "command -v fd"
           }
         },
         {
@@ -273,12 +299,14 @@
           "install": {
             "linux": "sudo apt install -y fzf || (git clone --depth 1 https://github.com/junegunn/fzf ~/.fzf && ~/.fzf/install --all)",
             "darwin": "brew install fzf",
-            "win32": "winget install junegunn.fzf --accept-source-agreements --accept-package-agreements"
+            "win32": "winget install junegunn.fzf --accept-source-agreements --accept-package-agreements",
+            "termux": "pkg install -y fzf"
           },
           "check": {
             "linux": "command -v fzf",
             "darwin": "command -v fzf",
-            "win32": "where fzf"
+            "win32": "where fzf",
+            "termux": "command -v fzf"
           }
         },
         {
@@ -288,12 +316,14 @@
           "install": {
             "linux": "sudo apt install -y jq",
             "darwin": "brew install jq",
-            "win32": "winget install jqlang.jq --accept-source-agreements --accept-package-agreements"
+            "win32": "winget install jqlang.jq --accept-source-agreements --accept-package-agreements",
+            "termux": "pkg install -y jq"
           },
           "check": {
             "linux": "command -v jq",
             "darwin": "command -v jq",
-            "win32": "where jq"
+            "win32": "where jq",
+            "termux": "command -v jq"
           }
         },
         {
@@ -318,12 +348,14 @@
           "install": {
             "linux": "sudo apt install -y bat",
             "darwin": "brew install bat",
-            "win32": "winget install sharkdp.bat --accept-source-agreements --accept-package-agreements"
+            "win32": "winget install sharkdp.bat --accept-source-agreements --accept-package-agreements",
+            "termux": "pkg install -y bat"
           },
           "check": {
             "linux": "command -v bat || command -v batcat",
             "darwin": "command -v bat",
-            "win32": "where bat"
+            "win32": "where bat",
+            "termux": "command -v bat"
           }
         },
         {
@@ -333,12 +365,14 @@
           "install": {
             "linux": "sudo apt install -y eza || cargo install eza",
             "darwin": "brew install eza",
-            "win32": "winget install eza-community.eza --accept-source-agreements --accept-package-agreements"
+            "win32": "winget install eza-community.eza --accept-source-agreements --accept-package-agreements",
+            "termux": "pkg install -y eza"
           },
           "check": {
             "linux": "command -v eza",
             "darwin": "command -v eza",
-            "win32": "where eza"
+            "win32": "where eza",
+            "termux": "command -v eza"
           }
         },
         {
@@ -393,12 +427,14 @@
           "install": {
             "linux": "curl -sS https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh | bash",
             "darwin": "brew install zoxide",
-            "win32": "winget install ajeetdsouza.zoxide --accept-source-agreements --accept-package-agreements"
+            "win32": "winget install ajeetdsouza.zoxide --accept-source-agreements --accept-package-agreements",
+            "termux": "curl -sS https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh | bash"
           },
           "check": {
             "linux": "command -v zoxide",
             "darwin": "command -v zoxide",
-            "win32": "where zoxide"
+            "win32": "where zoxide",
+            "termux": "command -v zoxide"
           }
         },
         {
@@ -408,12 +444,14 @@
           "install": {
             "linux": "curl -sS https://starship.rs/install.sh | sh -s -- -y",
             "darwin": "brew install starship",
-            "win32": "winget install Starship.Starship --accept-source-agreements --accept-package-agreements"
+            "win32": "winget install Starship.Starship --accept-source-agreements --accept-package-agreements",
+            "termux": "curl -sS https://starship.rs/install.sh | sh -s -- -y"
           },
           "check": {
             "linux": "command -v starship",
             "darwin": "command -v starship",
-            "win32": "where starship"
+            "win32": "where starship",
+            "termux": "command -v starship"
           }
         },
         {
@@ -453,12 +491,14 @@
           "install": {
             "linux": "cargo install du-dust",
             "darwin": "brew install dust",
-            "win32": "winget install bootandy.dust --accept-source-agreements --accept-package-agreements"
+            "win32": "winget install bootandy.dust --accept-source-agreements --accept-package-agreements",
+            "termux": "cargo install du-dust"
           },
           "check": {
             "linux": "command -v dust",
             "darwin": "command -v dust",
-            "win32": "where dust"
+            "win32": "where dust",
+            "termux": "command -v dust"
           }
         },
         {
@@ -483,12 +523,14 @@
           "install": {
             "linux": "cargo install sd",
             "darwin": "brew install sd",
-            "win32": "winget install chmln.sd --accept-source-agreements --accept-package-agreements"
+            "win32": "winget install chmln.sd --accept-source-agreements --accept-package-agreements",
+            "termux": "cargo install sd"
           },
           "check": {
             "linux": "command -v sd",
             "darwin": "command -v sd",
-            "win32": "where sd"
+            "win32": "where sd",
+            "termux": "command -v sd"
           }
         },
         {
@@ -543,12 +585,14 @@
           "install": {
             "linux": "sudo apt install -y glow || (curl -sS https://raw.githubusercontent.com/charmbracelet/glow/main/install.sh | bash)",
             "darwin": "brew install glow",
-            "win32": "winget install Charm.glow --accept-source-agreements --accept-package-agreements"
+            "win32": "winget install Charm.glow --accept-source-agreements --accept-package-agreements",
+            "termux": "pkg install -y glow"
           },
           "check": {
             "linux": "command -v glow",
             "darwin": "command -v glow",
-            "win32": "where glow"
+            "win32": "where glow",
+            "termux": "command -v glow"
           }
         },
         {
@@ -579,16 +623,19 @@
           "install": {
             "linux": "curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y",
             "darwin": "curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y",
-            "win32": "winget install Rustlang.Rustup --accept-source-agreements --accept-package-agreements"
+            "win32": "winget install Rustlang.Rustup --accept-source-agreements --accept-package-agreements",
+            "termux": "curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y"
           },
           "check": {
             "linux": "command -v cargo",
             "darwin": "command -v cargo",
-            "win32": "where cargo"
+            "win32": "where cargo",
+            "termux": "command -v cargo"
           },
           "post_install": {
             "linux": "grep -q '.cargo/bin' ~/.commonrc 2>/dev/null || echo 'export PATH=\"$HOME/.cargo/bin:$PATH\"' >> ~/.commonrc",
-            "darwin": "grep -q '.cargo/bin' ~/.commonrc 2>/dev/null || echo 'export PATH=\"$HOME/.cargo/bin:$PATH\"' >> ~/.commonrc"
+            "darwin": "grep -q '.cargo/bin' ~/.commonrc 2>/dev/null || echo 'export PATH=\"$HOME/.cargo/bin:$PATH\"' >> ~/.commonrc",
+            "termux": "grep -q '.cargo/bin' ~/.commonrc 2>/dev/null || echo 'export PATH=\"$HOME/.cargo/bin:$PATH\"' >> ~/.commonrc"
           }
         },
         {
@@ -598,15 +645,18 @@
           "install": {
             "linux": "GO_VERSION=$(curl -s https://go.dev/VERSION?m=text | head -n 1 | sed 's/go//') && wget -q \"https://dl.google.com/go/go${GO_VERSION}.linux-amd64.tar.gz\" -O /tmp/go.tar.gz && sudo rm -rf /usr/local/go && sudo tar -C /usr/local -xzf /tmp/go.tar.gz && rm /tmp/go.tar.gz",
             "darwin": "brew install go",
-            "win32": "winget install GoLang.Go --accept-source-agreements --accept-package-agreements"
+            "win32": "winget install GoLang.Go --accept-source-agreements --accept-package-agreements",
+            "termux": "GO_VERSION=$(curl -s https://go.dev/VERSION?m=text | head -n 1 | sed 's/go//') && wget -q \"https://dl.google.com/go/go${GO_VERSION}.linux-arm64.tar.gz\" -O /tmp/go.tar.gz && rm -rf $PREFIX/go && tar -C $PREFIX -xzf /tmp/go.tar.gz && rm /tmp/go.tar.gz"
           },
           "check": {
             "linux": "command -v go",
             "darwin": "command -v go",
-            "win32": "where go"
+            "win32": "where go",
+            "termux": "command -v go"
           },
           "post_install": {
-            "linux": "grep -q '/usr/local/go/bin' ~/.commonrc 2>/dev/null || echo 'export PATH=\"$PATH:/usr/local/go/bin\"' >> ~/.commonrc"
+            "linux": "grep -q '/usr/local/go/bin' ~/.commonrc 2>/dev/null || echo 'export PATH=\"$PATH:/usr/local/go/bin\"' >> ~/.commonrc",
+            "termux": "grep -q '$PREFIX/go/bin' ~/.commonrc 2>/dev/null || echo 'export PATH=\"$PATH:$PREFIX/go/bin\"' >> ~/.commonrc"
           }
         },
         {
@@ -616,12 +666,14 @@
           "install": {
             "linux": "curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh | bash",
             "darwin": "curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh | bash",
-            "win32": "winget install OpenJS.NodeJS.LTS --accept-source-agreements --accept-package-agreements"
+            "win32": "winget install OpenJS.NodeJS.LTS --accept-source-agreements --accept-package-agreements",
+            "termux": "curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh | bash"
           },
           "check": {
             "linux": "[ -d \"$HOME/.nvm\" ]",
             "darwin": "[ -d \"$HOME/.nvm\" ]",
-            "win32": "where node"
+            "win32": "where node",
+            "termux": "[ -d \"$HOME/.nvm\" ]"
           }
         },
         {
@@ -630,11 +682,13 @@
           "description": "Runtime JavaScript super fast",
           "install": {
             "linux": "curl -fsSL https://bun.sh/install | bash",
-            "darwin": "curl -fsSL https://bun.sh/install | bash"
+            "darwin": "curl -fsSL https://bun.sh/install | bash",
+            "termux": "curl -fsSL https://bun.sh/install | bash"
           },
           "check": {
             "linux": "command -v bun",
-            "darwin": "command -v bun"
+            "darwin": "command -v bun",
+            "termux": "command -v bun"
           }
         },
         {
@@ -644,12 +698,14 @@
           "install": {
             "linux": "corepack enable && corepack prepare pnpm@latest --activate",
             "darwin": "corepack enable && corepack prepare pnpm@latest --activate",
-            "win32": "corepack enable && corepack prepare pnpm@latest --activate"
+            "win32": "corepack enable && corepack prepare pnpm@latest --activate",
+            "termux": "corepack enable && corepack prepare pnpm@latest --activate"
           },
           "check": {
             "linux": "command -v pnpm",
             "darwin": "command -v pnpm",
-            "win32": "where pnpm"
+            "win32": "where pnpm",
+            "termux": "command -v pnpm"
           }
         },
         {
@@ -659,12 +715,14 @@
           "install": {
             "linux": "curl -fsSL https://deno.land/install.sh | sh",
             "darwin": "brew install deno",
-            "win32": "winget install DenoLand.Deno --accept-source-agreements --accept-package-agreements"
+            "win32": "winget install DenoLand.Deno --accept-source-agreements --accept-package-agreements",
+            "termux": "curl -fsSL https://deno.land/install.sh | sh"
           },
           "check": {
             "linux": "command -v deno",
             "darwin": "command -v deno",
-            "win32": "where deno"
+            "win32": "where deno",
+            "termux": "command -v deno"
           }
         },
         {
@@ -674,12 +732,14 @@
           "install": {
             "linux": "sudo apt install -y openjdk-21-jdk || (sudo add-apt-repository -y ppa:openjdk-r/ppa && sudo apt update && sudo apt install -y openjdk-21-jdk)",
             "darwin": "brew install openjdk@21",
-            "win32": "winget install Microsoft.OpenJDK.21 --accept-source-agreements --accept-package-agreements"
+            "win32": "winget install Microsoft.OpenJDK.21 --accept-source-agreements --accept-package-agreements",
+            "termux": "pkg install -y openjdk-17"
           },
           "check": {
             "linux": "command -v java",
             "darwin": "command -v java",
-            "win32": "where java"
+            "win32": "where java",
+            "termux": "command -v java"
           }
         },
         {
@@ -777,12 +837,14 @@
           "install": {
             "linux": "sudo apt install -y cmake",
             "darwin": "brew install cmake",
-            "win32": "winget install Kitware.CMake --accept-source-agreements --accept-package-agreements"
+            "win32": "winget install Kitware.CMake --accept-source-agreements --accept-package-agreements",
+            "termux": "pkg install -y cmake"
           },
           "check": {
             "linux": "command -v cmake",
             "darwin": "command -v cmake",
-            "win32": "where cmake"
+            "win32": "where cmake",
+            "termux": "command -v cmake"
           }
         },
         {
@@ -792,12 +854,14 @@
           "install": {
             "linux": "sudo apt install -y gcc g++",
             "darwin": "xcode-select --install 2>/dev/null || brew install gcc",
-            "win32": "winget install MSYS2.MSYS2 --accept-source-agreements --accept-package-agreements"
+            "win32": "winget install MSYS2.MSYS2 --accept-source-agreements --accept-package-agreements",
+            "termux": "pkg install -y clang"
           },
           "check": {
             "linux": "command -v gcc",
             "darwin": "command -v gcc",
-            "win32": "where gcc"
+            "win32": "where gcc",
+            "termux": "command -v clang"
           }
         },
         {
@@ -807,12 +871,14 @@
           "install": {
             "linux": "sudo apt install -y clang lldb lld",
             "darwin": "brew install llvm",
-            "win32": "winget install LLVM.LLVM --accept-source-agreements --accept-package-agreements"
+            "win32": "winget install LLVM.LLVM --accept-source-agreements --accept-package-agreements",
+            "termux": "pkg install -y clang lld"
           },
           "check": {
             "linux": "command -v clang",
             "darwin": "command -v clang",
-            "win32": "where clang"
+            "win32": "where clang",
+            "termux": "command -v clang"
           }
         }
       ]
@@ -1018,12 +1084,14 @@
           "install": {
             "linux": "curl -LsSf https://astral.sh/uv/install.sh | sh",
             "darwin": "curl -LsSf https://astral.sh/uv/install.sh | sh",
-            "win32": "powershell -ExecutionPolicy ByPass -c \"irm https://astral.sh/uv/install.ps1 | iex\""
+            "win32": "powershell -ExecutionPolicy ByPass -c \"irm https://astral.sh/uv/install.ps1 | iex\"",
+            "termux": "curl -LsSf https://astral.sh/uv/install.sh | sh"
           },
           "check": {
             "linux": "command -v uv",
             "darwin": "command -v uv",
-            "win32": "where uv"
+            "win32": "where uv",
+            "termux": "command -v uv"
           }
         },
         {
@@ -1048,12 +1116,14 @@
           "install": {
             "linux": "sudo apt install -y pipx && pipx ensurepath",
             "darwin": "brew install pipx",
-            "win32": "winget install pipx.pipx --accept-source-agreements --accept-package-agreements"
+            "win32": "winget install pipx.pipx --accept-source-agreements --accept-package-agreements",
+            "termux": "pip install pipx && pipx ensurepath"
           },
           "check": {
             "linux": "command -v pipx",
             "darwin": "command -v pipx",
-            "win32": "where pipx"
+            "win32": "where pipx",
+            "termux": "command -v pipx"
           }
         },
         {
@@ -1063,12 +1133,14 @@
           "install": {
             "linux": "curl -sSL https://install.python-poetry.org | python3 -",
             "darwin": "brew install poetry",
-            "win32": "winget install Python.Poetry --accept-source-agreements --accept-package-agreements"
+            "win32": "winget install Python.Poetry --accept-source-agreements --accept-package-agreements",
+            "termux": "curl -sSL https://install.python-poetry.org | python3 -"
           },
           "check": {
             "linux": "command -v poetry",
             "darwin": "command -v poetry",
-            "win32": "where poetry"
+            "win32": "where poetry",
+            "termux": "command -v poetry"
           }
         }
       ]
@@ -1144,12 +1216,14 @@
           "install": {
             "linux": "sudo apt install -y sqlite3",
             "darwin": "brew install sqlite3",
-            "win32": "winget install SQLite.SQLite --accept-source-agreements --accept-package-agreements"
+            "win32": "winget install SQLite.SQLite --accept-source-agreements --accept-package-agreements",
+            "termux": "pkg install -y sqlite"
           },
           "check": {
             "linux": "command -v sqlite3",
             "darwin": "command -v sqlite3",
-            "win32": "where sqlite3"
+            "win32": "where sqlite3",
+            "termux": "command -v sqlite3"
           }
         }
       ]
@@ -1240,12 +1314,14 @@
           "install": {
             "linux": "sudo apt install -y nmap",
             "darwin": "brew install nmap",
-            "win32": "winget install Insecure.Nmap --accept-source-agreements --accept-package-agreements"
+            "win32": "winget install Insecure.Nmap --accept-source-agreements --accept-package-agreements",
+            "termux": "pkg install -y nmap"
           },
           "check": {
             "linux": "command -v nmap",
             "darwin": "command -v nmap",
-            "win32": "where nmap"
+            "win32": "where nmap",
+            "termux": "command -v nmap"
           }
         }
       ]
@@ -1450,15 +1526,18 @@
           "description": "Oh My Zsh, zsh-autosuggestions, zsh-syntax-highlighting, Powerlevel10k",
           "install": {
             "linux": "sh -c \"$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)\" \"\" --unattended",
-            "darwin": "sh -c \"$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)\" \"\" --unattended"
+            "darwin": "sh -c \"$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)\" \"\" --unattended",
+            "termux": "sh -c \"$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)\" \"\" --unattended"
           },
           "check": {
             "linux": "[ -d \"$HOME/.oh-my-zsh\" ]",
-            "darwin": "[ -d \"$HOME/.oh-my-zsh\" ]"
+            "darwin": "[ -d \"$HOME/.oh-my-zsh\" ]",
+            "termux": "[ -d \"$HOME/.oh-my-zsh\" ]"
           },
           "post_install": {
             "linux": "ZSH_CUSTOM=\"${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}\" && [ ! -d \"$ZSH_CUSTOM/plugins/zsh-autosuggestions\" ] && git clone https://github.com/zsh-users/zsh-autosuggestions \"$ZSH_CUSTOM/plugins/zsh-autosuggestions\" && [ ! -d \"$ZSH_CUSTOM/plugins/zsh-syntax-highlighting\" ] && git clone https://github.com/zsh-users/zsh-syntax-highlighting \"$ZSH_CUSTOM/plugins/zsh-syntax-highlighting\" && [ ! -d \"$ZSH_CUSTOM/themes/powerlevel10k\" ] && git clone --depth=1 https://github.com/romkatv/powerlevel10k \"$ZSH_CUSTOM/themes/powerlevel10k\" && sed -i 's/^ZSH_THEME=.*/ZSH_THEME=\"powerlevel10k\\/powerlevel10k\"/g' ~/.zshrc && sed -i 's/^plugins=.*/plugins=(git zsh-autosuggestions zsh-syntax-highlighting fzf)/g' ~/.zshrc",
-            "darwin": "ZSH_CUSTOM=\"${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}\" && [ ! -d \"$ZSH_CUSTOM/plugins/zsh-autosuggestions\" ] && git clone https://github.com/zsh-users/zsh-autosuggestions \"$ZSH_CUSTOM/plugins/zsh-autosuggestions\" && [ ! -d \"$ZSH_CUSTOM/plugins/zsh-syntax-highlighting\" ] && git clone https://github.com/zsh-users/zsh-syntax-highlighting \"$ZSH_CUSTOM/plugins/zsh-syntax-highlighting\" && [ ! -d \"$ZSH_CUSTOM/themes/powerlevel10k\" ] && git clone --depth=1 https://github.com/romkatv/powerlevel10k \"$ZSH_CUSTOM/themes/powerlevel10k\" && sed -i '' 's/^ZSH_THEME=.*/ZSH_THEME=\"powerlevel10k\\/powerlevel10k\"/g' ~/.zshrc && sed -i '' 's/^plugins=.*/plugins=(git zsh-autosuggestions zsh-syntax-highlighting fzf)/g' ~/.zshrc"
+            "darwin": "ZSH_CUSTOM=\"${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}\" && [ ! -d \"$ZSH_CUSTOM/plugins/zsh-autosuggestions\" ] && git clone https://github.com/zsh-users/zsh-autosuggestions \"$ZSH_CUSTOM/plugins/zsh-autosuggestions\" && [ ! -d \"$ZSH_CUSTOM/plugins/zsh-syntax-highlighting\" ] && git clone https://github.com/zsh-users/zsh-syntax-highlighting \"$ZSH_CUSTOM/plugins/zsh-syntax-highlighting\" && [ ! -d \"$ZSH_CUSTOM/themes/powerlevel10k\" ] && git clone --depth=1 https://github.com/romkatv/powerlevel10k \"$ZSH_CUSTOM/themes/powerlevel10k\" && sed -i '' 's/^ZSH_THEME=.*/ZSH_THEME=\"powerlevel10k\\/powerlevel10k\"/g' ~/.zshrc && sed -i '' 's/^plugins=.*/plugins=(git zsh-autosuggestions zsh-syntax-highlighting fzf)/g' ~/.zshrc",
+            "termux": "ZSH_CUSTOM=\"${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}\" && [ ! -d \"$ZSH_CUSTOM/plugins/zsh-autosuggestions\" ] && git clone https://github.com/zsh-users/zsh-autosuggestions \"$ZSH_CUSTOM/plugins/zsh-autosuggestions\" && [ ! -d \"$ZSH_CUSTOM/plugins/zsh-syntax-highlighting\" ] && git clone https://github.com/zsh-users/zsh-syntax-highlighting \"$ZSH_CUSTOM/plugins/zsh-syntax-highlighting\" && [ ! -d \"$ZSH_CUSTOM/themes/powerlevel10k\" ] && git clone --depth=1 https://github.com/romkatv/powerlevel10k \"$ZSH_CUSTOM/themes/powerlevel10k\" && sed -i 's/^ZSH_THEME=.*/ZSH_THEME=\"powerlevel10k\\/powerlevel10k\"/g' ~/.zshrc && sed -i 's/^plugins=.*/plugins=(git zsh-autosuggestions zsh-syntax-highlighting fzf)/g' ~/.zshrc"
           }
         },
         {
@@ -1468,12 +1547,14 @@
           "install": {
             "linux": "sudo apt-add-repository -y ppa:fish-shell/release-3 && sudo apt update && sudo apt install -y fish",
             "darwin": "brew install fish",
-            "win32": "winget install FishShell.FishShell --accept-source-agreements --accept-package-agreements"
+            "win32": "winget install FishShell.FishShell --accept-source-agreements --accept-package-agreements",
+            "termux": "pkg install -y fish"
           },
           "check": {
             "linux": "command -v fish",
             "darwin": "command -v fish",
-            "win32": "where fish"
+            "win32": "where fish",
+            "termux": "command -v fish"
           }
         },
         {
@@ -1564,12 +1645,14 @@
           "install": {
             "linux": "sudo apt install -y ffmpeg",
             "darwin": "brew install ffmpeg",
-            "win32": "winget install Gyan.FFmpeg --accept-source-agreements --accept-package-agreements"
+            "win32": "winget install Gyan.FFmpeg --accept-source-agreements --accept-package-agreements",
+            "termux": "pkg install -y ffmpeg"
           },
           "check": {
             "linux": "command -v ffmpeg",
             "darwin": "command -v ffmpeg",
-            "win32": "where ffmpeg"
+            "win32": "where ffmpeg",
+            "termux": "command -v ffmpeg"
           }
         },
         {
@@ -1579,12 +1662,14 @@
           "install": {
             "linux": "sudo apt install -y imagemagick",
             "darwin": "brew install imagemagick",
-            "win32": "winget install ImageMagick.ImageMagick --accept-source-agreements --accept-package-agreements"
+            "win32": "winget install ImageMagick.ImageMagick --accept-source-agreements --accept-package-agreements",
+            "termux": "pkg install -y imagemagick"
           },
           "check": {
             "linux": "command -v magick || command -v convert",
             "darwin": "command -v magick",
-            "win32": "where magick"
+            "win32": "where magick",
+            "termux": "command -v magick || command -v convert"
           }
         },
         {
@@ -1594,12 +1679,14 @@
           "install": {
             "linux": "sudo apt install -y yt-dlp || pipx install yt-dlp || uv pip install --system --break-system-packages yt-dlp",
             "darwin": "brew install yt-dlp",
-            "win32": "winget install yt-dlp.yt-dlp --accept-source-agreements --accept-package-agreements"
+            "win32": "winget install yt-dlp.yt-dlp --accept-source-agreements --accept-package-agreements",
+            "termux": "pip install yt-dlp"
           },
           "check": {
             "linux": "command -v yt-dlp",
             "darwin": "command -v yt-dlp",
-            "win32": "where yt-dlp"
+            "win32": "where yt-dlp",
+            "termux": "command -v yt-dlp"
           }
         },
         {
@@ -1660,12 +1747,14 @@
           "install": {
             "linux": "sudo apt install -y gnupg",
             "darwin": "brew install gnupg",
-            "win32": "winget install GnuPG.GnuPG --accept-source-agreements --accept-package-agreements"
+            "win32": "winget install GnuPG.GnuPG --accept-source-agreements --accept-package-agreements",
+            "termux": "pkg install -y gnupg"
           },
           "check": {
             "linux": "command -v gpg",
             "darwin": "command -v gpg",
-            "win32": "where gpg"
+            "win32": "where gpg",
+            "termux": "command -v gpg"
           }
         },
         {
@@ -1756,12 +1845,14 @@
           "install": {
             "linux": "sudo apt install -y git-crypt",
             "darwin": "brew install git-crypt",
-            "win32": "winget install AGWA.git-crypt --accept-source-agreements --accept-package-agreements"
+            "win32": "winget install AGWA.git-crypt --accept-source-agreements --accept-package-agreements",
+            "termux": "pkg install -y git-crypt"
           },
           "check": {
             "linux": "command -v git-crypt",
             "darwin": "command -v git-crypt",
-            "win32": "where git-crypt"
+            "win32": "where git-crypt",
+            "termux": "command -v git-crypt"
           }
         },
         {
@@ -1786,12 +1877,14 @@
           "install": {
             "linux": "cargo install gitui",
             "darwin": "brew install gitui",
-            "win32": "winget install extrawurst.gitui --accept-source-agreements --accept-package-agreements"
+            "win32": "winget install extrawurst.gitui --accept-source-agreements --accept-package-agreements",
+            "termux": "cargo install gitui"
           },
           "check": {
             "linux": "command -v gitui",
             "darwin": "command -v gitui",
-            "win32": "where gitui"
+            "win32": "where gitui",
+            "termux": "command -v gitui"
           }
         },
         {
@@ -1879,11 +1972,13 @@
           "description": "High-throughput LLM serving engine",
           "install": {
             "linux": "pipx install vllm || uv pip install --system --break-system-packages vllm",
-            "darwin": "pipx install vllm || uv pip install --system --break-system-packages vllm"
+            "darwin": "pipx install vllm || uv pip install --system --break-system-packages vllm",
+            "termux": "pip install vllm"
           },
           "check": {
             "linux": "pip show vllm",
-            "darwin": "pip show vllm"
+            "darwin": "pip show vllm",
+            "termux": "pip show vllm"
           }
         },
         {
@@ -1893,12 +1988,14 @@
           "install": {
             "linux": "(pipx install openai || uv pip install --system --break-system-packages openai)",
             "darwin": "(pipx install openai || uv pip install --system --break-system-packages openai)",
-            "win32": "pip install --user openai"
+            "win32": "pip install --user openai",
+            "termux": "pip install openai"
           },
           "check": {
             "linux": "pip show openai",
             "darwin": "pip show openai",
-            "win32": "pip show openai"
+            "win32": "pip show openai",
+            "termux": "pip show openai"
           }
         },
         {
@@ -1908,12 +2005,14 @@
           "install": {
             "linux": "(pipx install anthropic || uv pip install --system --break-system-packages anthropic)",
             "darwin": "(pipx install anthropic || uv pip install --system --break-system-packages anthropic)",
-            "win32": "pip install --user anthropic"
+            "win32": "pip install --user anthropic",
+            "termux": "pip install anthropic"
           },
           "check": {
             "linux": "pip show anthropic",
             "darwin": "pip show anthropic",
-            "win32": "pip show anthropic"
+            "win32": "pip show anthropic",
+            "termux": "pip show anthropic"
           }
         },
         {
@@ -1923,12 +2022,14 @@
           "install": {
             "linux": "(pipx install huggingface_hub || uv pip install --system --break-system-packages huggingface_hub)",
             "darwin": "(pipx install huggingface_hub || uv pip install --system --break-system-packages huggingface_hub)",
-            "win32": "pip install --user huggingface_hub"
+            "win32": "pip install --user huggingface_hub",
+            "termux": "pip install huggingface_hub"
           },
           "check": {
             "linux": "command -v huggingface-cli",
             "darwin": "command -v huggingface-cli",
-            "win32": "where huggingface-cli"
+            "win32": "where huggingface-cli",
+            "termux": "command -v huggingface-cli"
           }
         },
         {
@@ -1938,12 +2039,14 @@
           "install": {
             "linux": "(pipx install gguf || uv pip install --system --break-system-packages gguf)",
             "darwin": "(pipx install gguf || uv pip install --system --break-system-packages gguf)",
-            "win32": "pip install --user gguf"
+            "win32": "pip install --user gguf",
+            "termux": "pip install gguf"
           },
           "check": {
             "linux": "pip show gguf",
             "darwin": "pip show gguf",
-            "win32": "pip show gguf"
+            "win32": "pip show gguf",
+            "termux": "pip show gguf"
           }
         },
         {
@@ -1997,11 +2100,13 @@
           "description": "AI-powered terminal coding assistant",
           "install": {
             "linux": "go install github.com/opencode-ai/opencode@latest",
-            "darwin": "go install github.com/opencode-ai/opencode@latest"
+            "darwin": "go install github.com/opencode-ai/opencode@latest",
+            "termux": "go install github.com/opencode-ai/opencode@latest"
           },
           "check": {
             "linux": "command -v opencode",
-            "darwin": "command -v opencode"
+            "darwin": "command -v opencode",
+            "termux": "command -v opencode"
           }
         },
         {
@@ -2011,12 +2116,14 @@
           "install": {
             "linux": "npm install -g @anthropic-ai/claude-code || npm install -g @google/gemini-cli",
             "darwin": "npm install -g @anthropic-ai/claude-code || npm install -g @google/gemini-cli",
-            "win32": "winget install Google.GeminiCLI --accept-source-agreements --accept-package-agreements"
+            "win32": "winget install Google.GeminiCLI --accept-source-agreements --accept-package-agreements",
+            "termux": "npm install -g @google/gemini-cli"
           },
           "check": {
             "linux": "command -v gemini",
             "darwin": "command -v gemini",
-            "win32": "where gemini"
+            "win32": "where gemini",
+            "termux": "command -v gemini"
           }
         },
         {
@@ -2026,12 +2133,14 @@
           "install": {
             "linux": "npm install -g @anthropic-ai/claude-code",
             "darwin": "npm install -g @anthropic-ai/claude-code",
-            "win32": "winget install Anthropic.ClaudeCode --accept-source-agreements --accept-package-agreements"
+            "win32": "winget install Anthropic.ClaudeCode --accept-source-agreements --accept-package-agreements",
+            "termux": "npm install -g @anthropic-ai/claude-code"
           },
           "check": {
             "linux": "command -v claude",
             "darwin": "command -v claude",
-            "win32": "where claude"
+            "win32": "where claude",
+            "termux": "command -v claude"
           }
         },
         {
@@ -2041,12 +2150,14 @@
           "install": {
             "linux": "pipx install aider-chat || uv pip install --system --break-system-packages aider-chat",
             "darwin": "pipx install aider-chat || uv pip install --system --break-system-packages aider-chat",
-            "win32": "winget install AiderChat.Aider --accept-source-agreements --accept-package-agreements"
+            "win32": "winget install AiderChat.Aider --accept-source-agreements --accept-package-agreements",
+            "termux": "pip install aider-chat"
           },
           "check": {
             "linux": "command -v aider",
             "darwin": "command -v aider",
-            "win32": "where aider"
+            "win32": "where aider",
+            "termux": "command -v aider"
           }
         },
         {
@@ -2055,11 +2166,13 @@
           "description": "Inference.ai terminal assistant",
           "install": {
             "linux": "pipx install pi-ai || uv pip install --system --break-system-packages pi-ai",
-            "darwin": "pipx install pi-ai || uv pip install --system --break-system-packages pi-ai"
+            "darwin": "pipx install pi-ai || uv pip install --system --break-system-packages pi-ai",
+            "termux": "pip install pi-ai"
           },
           "check": {
             "linux": "pip show pi-ai",
-            "darwin": "pip show pi-ai"
+            "darwin": "pip show pi-ai",
+            "termux": "pip show pi-ai"
           }
         },
         {
@@ -2068,11 +2181,13 @@
           "description": "NousResearch Hermes agent CLI",
           "install": {
             "linux": "pipx install hermes-agent || uv pip install --system --break-system-packages hermes-agent",
-            "darwin": "pipx install hermes-agent || uv pip install --system --break-system-packages hermes-agent"
+            "darwin": "pipx install hermes-agent || uv pip install --system --break-system-packages hermes-agent",
+            "termux": "pip install hermes-agent"
           },
           "check": {
             "linux": "pip show hermes-agent",
-            "darwin": "pip show hermes-agent"
+            "darwin": "pip show hermes-agent",
+            "termux": "pip show hermes-agent"
           }
         },
         {
@@ -2096,11 +2211,13 @@
           "description": "Aider in diff mode for git workflows",
           "install": {
             "linux": "pipx install aider-chat || uv pip install --system --break-system-packages aider-chat",
-            "darwin": "pipx install aider-chat || uv pip install --system --break-system-packages aider-chat"
+            "darwin": "pipx install aider-chat || uv pip install --system --break-system-packages aider-chat",
+            "termux": "pip install aider-chat"
           },
           "check": {
             "linux": "command -v aider",
-            "darwin": "command -v aider"
+            "darwin": "command -v aider",
+            "termux": "command -v aider"
           }
         },
         {
@@ -2109,11 +2226,13 @@
           "description": "AI-powered bug fixer for GitHub issues",
           "install": {
             "linux": "pipx install sweepai || uv pip install --system --break-system-packages sweepai",
-            "darwin": "pipx install sweepai || uv pip install --system --break-system-packages sweepai"
+            "darwin": "pipx install sweepai || uv pip install --system --break-system-packages sweepai",
+            "termux": "pip install sweepai"
           },
           "check": {
             "linux": "pip show sweepai",
-            "darwin": "pip show sweepai"
+            "darwin": "pip show sweepai",
+            "termux": "pip show sweepai"
           }
         },
         {
@@ -2122,11 +2241,13 @@
           "description": "Sweep AI development tools",
           "install": {
             "linux": "pipx install sweepai || uv pip install --system --break-system-packages sweepai",
-            "darwin": "pipx install sweepai || uv pip install --system --break-system-packages sweepai"
+            "darwin": "pipx install sweepai || uv pip install --system --break-system-packages sweepai",
+            "termux": "pip install sweepai"
           },
           "check": {
             "linux": "pip show sweepai",
-            "darwin": "pip show sweepai"
+            "darwin": "pip show sweepai",
+            "termux": "pip show sweepai"
           }
         }
       ]
@@ -2141,11 +2262,13 @@
           "description": "Autonomous GPT-4 agent",
           "install": {
             "linux": "pipx install autogpt || uv pip install --system --break-system-packages autogpt",
-            "darwin": "pipx install autogpt || uv pip install --system --break-system-packages autogpt"
+            "darwin": "pipx install autogpt || uv pip install --system --break-system-packages autogpt",
+            "termux": "pip install autogpt"
           },
           "check": {
             "linux": "pip show autogpt",
-            "darwin": "pip show autogpt"
+            "darwin": "pip show autogpt",
+            "termux": "pip show autogpt"
           }
         },
         {
@@ -2154,11 +2277,13 @@
           "description": "Multi-agent orchestration framework",
           "install": {
             "linux": "pipx install crewai || uv pip install --system --break-system-packages crewai",
-            "darwin": "pipx install crewai || uv pip install --system --break-system-packages crewai"
+            "darwin": "pipx install crewai || uv pip install --system --break-system-packages crewai",
+            "termux": "pip install crewai"
           },
           "check": {
             "linux": "pip show crewai",
-            "darwin": "pip show crewai"
+            "darwin": "pip show crewai",
+            "termux": "pip show crewai"
           }
         },
         {
@@ -2167,11 +2292,13 @@
           "description": "Agent framework by LangChain",
           "install": {
             "linux": "(pipx install langchain || uv pip install --system --break-system-packages langchain) && (pipx install langchain-cli || uv pip install --system --break-system-packages langchain-cli)",
-            "darwin": "(pipx install langchain || uv pip install --system --break-system-packages langchain) && (pipx install langchain-cli || uv pip install --system --break-system-packages langchain-cli)"
+            "darwin": "(pipx install langchain || uv pip install --system --break-system-packages langchain) && (pipx install langchain-cli || uv pip install --system --break-system-packages langchain-cli)",
+            "termux": "pip install langchain langchain-cli"
           },
           "check": {
             "linux": "pip show langchain",
-            "darwin": "pip show langchain"
+            "darwin": "pip show langchain",
+            "termux": "pip show langchain"
           }
         },
         {
@@ -2180,11 +2307,13 @@
           "description": "Microsoft AI orchestration SDK",
           "install": {
             "linux": "(pipx install semantic-kernel || uv pip install --system --break-system-packages semantic-kernel)",
-            "darwin": "(pipx install semantic-kernel || uv pip install --system --break-system-packages semantic-kernel)"
+            "darwin": "(pipx install semantic-kernel || uv pip install --system --break-system-packages semantic-kernel)",
+            "termux": "pip install semantic-kernel"
           },
           "check": {
             "linux": "pip show semantic-kernel",
-            "darwin": "pip show semantic-kernel"
+            "darwin": "pip show semantic-kernel",
+            "termux": "pip show semantic-kernel"
           }
         },
         {
@@ -2193,11 +2322,13 @@
           "description": "HuggingFace lightweight agent framework",
           "install": {
             "linux": "pipx install smolagents || uv pip install --system --break-system-packages smolagents",
-            "darwin": "pipx install smolagents || uv pip install --system --break-system-packages smolagents"
+            "darwin": "pipx install smolagents || uv pip install --system --break-system-packages smolagents",
+            "termux": "pip install smolagents"
           },
           "check": {
             "linux": "pip show smolagents",
-            "darwin": "pip show smolagents"
+            "darwin": "pip show smolagents",
+            "termux": "pip show smolagents"
           }
         },
         {
@@ -2206,11 +2337,13 @@
           "description": "Agent framework with memory & tools",
           "install": {
             "linux": "pipx install phidata || uv pip install --system --break-system-packages phidata",
-            "darwin": "pipx install phidata || uv pip install --system --break-system-packages phidata"
+            "darwin": "pipx install phidata || uv pip install --system --break-system-packages phidata",
+            "termux": "pip install phidata"
           },
           "check": {
             "linux": "pip show phidata",
-            "darwin": "pip show phidata"
+            "darwin": "pip show phidata",
+            "termux": "pip show phidata"
           }
         },
         {
@@ -2219,11 +2352,13 @@
           "description": "Lightweight multi-agent orchestration",
           "install": {
             "linux": "(pipx install openai-swarm || uv pip install --system --break-system-packages openai-swarm)",
-            "darwin": "(pipx install openai-swarm || uv pip install --system --break-system-packages openai-swarm)"
+            "darwin": "(pipx install openai-swarm || uv pip install --system --break-system-packages openai-swarm)",
+            "termux": "pip install openai-swarm"
           },
           "check": {
             "linux": "pip show openai-swarm",
-            "darwin": "pip show openai-swarm"
+            "darwin": "pip show openai-swarm",
+            "termux": "pip show openai-swarm"
           }
         },
         {
@@ -2232,11 +2367,13 @@
           "description": "AI browser automation agent",
           "install": {
             "linux": "pipx install browser-use || uv pip install --system --break-system-packages browser-use",
-            "darwin": "pipx install browser-use || uv pip install --system --break-system-packages browser-use"
+            "darwin": "pipx install browser-use || uv pip install --system --break-system-packages browser-use",
+            "termux": "pip install browser-use"
           },
           "check": {
             "linux": "pip show browser-use",
-            "darwin": "pip show browser-use"
+            "darwin": "pip show browser-use",
+            "termux": "pip show browser-use"
           }
         },
         {
@@ -2245,11 +2382,13 @@
           "description": "Memory layer for AI agents",
           "install": {
             "linux": "(pipx install mem0ai || uv pip install --system --break-system-packages mem0ai)",
-            "darwin": "(pipx install mem0ai || uv pip install --system --break-system-packages mem0ai)"
+            "darwin": "(pipx install mem0ai || uv pip install --system --break-system-packages mem0ai)",
+            "termux": "pip install mem0ai"
           },
           "check": {
             "linux": "pip show mem0ai",
-            "darwin": "pip show mem0ai"
+            "darwin": "pip show mem0ai",
+            "termux": "pip show mem0ai"
           }
         },
         {
@@ -2258,11 +2397,13 @@
           "description": "High-performance agent framework (ex-Phidata)",
           "install": {
             "linux": "pipx install agno || uv pip install --system --break-system-packages agno",
-            "darwin": "pipx install agno || uv pip install --system --break-system-packages agno"
+            "darwin": "pipx install agno || uv pip install --system --break-system-packages agno",
+            "termux": "pip install agno"
           },
           "check": {
             "linux": "pip show agno",
-            "darwin": "pip show agno"
+            "darwin": "pip show agno",
+            "termux": "pip show agno"
           }
         }
       ]
@@ -2278,12 +2419,14 @@
           "install": {
             "linux": "(pipx install chromadb || uv pip install --system --break-system-packages chromadb)",
             "darwin": "(pipx install chromadb || uv pip install --system --break-system-packages chromadb)",
-            "win32": "winget install ChromaDB.ChromaDB --accept-source-agreements --accept-package-agreements"
+            "win32": "winget install ChromaDB.ChromaDB --accept-source-agreements --accept-package-agreements",
+            "termux": "pip install chromadb"
           },
           "check": {
             "linux": "pip show chromadb",
             "darwin": "pip show chromadb",
-            "win32": "pip show chromadb"
+            "win32": "pip show chromadb",
+            "termux": "pip show chromadb"
           }
         },
         {
@@ -2333,11 +2476,13 @@
           "description": "Facebook AI Similarity Search",
           "install": {
             "linux": "(pipx install faiss-cpu || uv pip install --system --break-system-packages faiss-cpu)",
-            "darwin": "(pipx install faiss-cpu || uv pip install --system --break-system-packages faiss-cpu)"
+            "darwin": "(pipx install faiss-cpu || uv pip install --system --break-system-packages faiss-cpu)",
+            "termux": "pip install faiss-cpu"
           },
           "check": {
             "linux": "pip show faiss-cpu",
-            "darwin": "pip show faiss-cpu"
+            "darwin": "pip show faiss-cpu",
+            "termux": "pip show faiss-cpu"
           }
         },
         {
@@ -2346,11 +2491,13 @@
           "description": "RAG toolkit from LangChain",
           "install": {
             "linux": "(pipx install langchain || uv pip install --system --break-system-packages langchain) && (pipx install langchain-community || uv pip install --system --break-system-packages langchain-community) && (pipx install langchain-core || uv pip install --system --break-system-packages langchain-core)",
-            "darwin": "(pipx install langchain || uv pip install --system --break-system-packages langchain) && (pipx install langchain-community || uv pip install --system --break-system-packages langchain-community) && (pipx install langchain-core || uv pip install --system --break-system-packages langchain-core)"
+            "darwin": "(pipx install langchain || uv pip install --system --break-system-packages langchain) && (pipx install langchain-community || uv pip install --system --break-system-packages langchain-community) && (pipx install langchain-core || uv pip install --system --break-system-packages langchain-core)",
+            "termux": "pip install langchain langchain-community langchain-core"
           },
           "check": {
             "linux": "pip show langchain",
-            "darwin": "pip show langchain"
+            "darwin": "pip show langchain",
+            "termux": "pip show langchain"
           }
         },
         {
@@ -2359,11 +2506,13 @@
           "description": "Data framework for LLM apps (RAG)",
           "install": {
             "linux": "(pipx install llama-index || uv pip install --system --break-system-packages llama-index)",
-            "darwin": "(pipx install llama-index || uv pip install --system --break-system-packages llama-index)"
+            "darwin": "(pipx install llama-index || uv pip install --system --break-system-packages llama-index)",
+            "termux": "pip install llama-index"
           },
           "check": {
             "linux": "pip show llama-index",
-            "darwin": "pip show llama-index"
+            "darwin": "pip show llama-index",
+            "termux": "pip show llama-index"
           }
         },
         {
@@ -2372,11 +2521,13 @@
           "description": "Document parsing for RAG pipelines",
           "install": {
             "linux": "(pipx install unstructured || uv pip install --system --break-system-packages unstructured)",
-            "darwin": "(pipx install unstructured || uv pip install --system --break-system-packages unstructured)"
+            "darwin": "(pipx install unstructured || uv pip install --system --break-system-packages unstructured)",
+            "termux": "pip install unstructured"
           },
           "check": {
             "linux": "pip show unstructured",
-            "darwin": "pip show unstructured"
+            "darwin": "pip show unstructured",
+            "termux": "pip show unstructured"
           }
         },
         {
@@ -2385,11 +2536,13 @@
           "description": "RAG framework for easy embedding",
           "install": {
             "linux": "(pipx install embedchain || uv pip install --system --break-system-packages embedchain)",
-            "darwin": "(pipx install embedchain || uv pip install --system --break-system-packages embedchain)"
+            "darwin": "(pipx install embedchain || uv pip install --system --break-system-packages embedchain)",
+            "termux": "pip install embedchain"
           },
           "check": {
             "linux": "pip show embedchain",
-            "darwin": "pip show embedchain"
+            "darwin": "pip show embedchain",
+            "termux": "pip show embedchain"
           }
         }
       ]
@@ -2405,12 +2558,14 @@
           "install": {
             "linux": "sudo apt install -y tesseract-ocr",
             "darwin": "brew install tesseract",
-            "win32": "winget install UB-Mannheim.TesseractOCR --accept-source-agreements --accept-package-agreements"
+            "win32": "winget install UB-Mannheim.TesseractOCR --accept-source-agreements --accept-package-agreements",
+            "termux": "pkg install -y tesseract"
           },
           "check": {
             "linux": "command -v tesseract",
             "darwin": "command -v tesseract",
-            "win32": "where tesseract"
+            "win32": "where tesseract",
+            "termux": "command -v tesseract"
           }
         },
         {
@@ -2419,11 +2574,13 @@
           "description": "Ready-to-use OCR (80+ languages)",
           "install": {
             "linux": "pipx install easyocr || uv pip install --system --break-system-packages easyocr",
-            "darwin": "pipx install easyocr || uv pip install --system --break-system-packages easyocr"
+            "darwin": "pipx install easyocr || uv pip install --system --break-system-packages easyocr",
+            "termux": "pip install easyocr"
           },
           "check": {
             "linux": "pip show easyocr",
-            "darwin": "pip show easyocr"
+            "darwin": "pip show easyocr",
+            "termux": "pip show easyocr"
           }
         },
         {
@@ -2432,11 +2589,13 @@
           "description": "Baidu's OCR toolkit (multi-language)",
           "install": {
             "linux": "(pipx install paddlepaddle || uv pip install --system --break-system-packages paddlepaddle) && (pipx install paddleocr || uv pip install --system --break-system-packages paddleocr)",
-            "darwin": "(pipx install paddlepaddle || uv pip install --system --break-system-packages paddlepaddle) && (pipx install paddleocr || uv pip install --system --break-system-packages paddleocr)"
+            "darwin": "(pipx install paddlepaddle || uv pip install --system --break-system-packages paddlepaddle) && (pipx install paddleocr || uv pip install --system --break-system-packages paddleocr)",
+            "termux": "pip install paddlepaddle paddleocr"
           },
           "check": {
             "linux": "pip show paddleocr",
-            "darwin": "pip show paddleocr"
+            "darwin": "pip show paddleocr",
+            "termux": "pip show paddleocr"
           }
         },
         {
@@ -2445,11 +2604,13 @@
           "description": "90+ language OCR with detection",
           "install": {
             "linux": "pipx install surya-ocr || uv pip install --system --break-system-packages surya-ocr",
-            "darwin": "pipx install surya-ocr || uv pip install --system --break-system-packages surya-ocr"
+            "darwin": "pipx install surya-ocr || uv pip install --system --break-system-packages surya-ocr",
+            "termux": "pip install surya-ocr"
           },
           "check": {
             "linux": "pip show surya-ocr",
-            "darwin": "pip show surya-ocr"
+            "darwin": "pip show surya-ocr",
+            "termux": "pip show surya-ocr"
           }
         },
         {
@@ -2458,11 +2619,13 @@
           "description": "Document Text Recognition (Mindee)",
           "install": {
             "linux": "pipx install python-doctr || uv pip install --system --break-system-packages python-doctr",
-            "darwin": "pipx install python-doctr || uv pip install --system --break-system-packages python-doctr"
+            "darwin": "pipx install python-doctr || uv pip install --system --break-system-packages python-doctr",
+            "termux": "pip install python-doctr"
           },
           "check": {
             "linux": "pip show python-doctr",
-            "darwin": "pip show python-doctr"
+            "darwin": "pip show python-doctr",
+            "termux": "pip show python-doctr"
           }
         },
         {
@@ -2471,11 +2634,13 @@
           "description": "Fast OCR based on PaddleOCR",
           "install": {
             "linux": "pipx install rapidocr-onnxruntime || uv pip install --system --break-system-packages rapidocr-onnxruntime",
-            "darwin": "pipx install rapidocr-onnxruntime || uv pip install --system --break-system-packages rapidocr-onnxruntime"
+            "darwin": "pipx install rapidocr-onnxruntime || uv pip install --system --break-system-packages rapidocr-onnxruntime",
+            "termux": "pip install rapidocr-onnxruntime"
           },
           "check": {
             "linux": "pip show rapidocr-onnxruntime",
-            "darwin": "pip show rapidocr-onnxruntime"
+            "darwin": "pip show rapidocr-onnxruntime",
+            "termux": "pip show rapidocr-onnxruntime"
           }
         }
       ]
@@ -2663,12 +2828,14 @@
           "install": {
             "linux": "pipx install openai-whisper || uv pip install --system --break-system-packages openai-whisper",
             "darwin": "pipx install openai-whisper || uv pip install --system --break-system-packages openai-whisper",
-            "win32": "winget install OpenAI.Whisper --accept-source-agreements --accept-package-agreements"
+            "win32": "winget install OpenAI.Whisper --accept-source-agreements --accept-package-agreements",
+            "termux": "pip install openai-whisper"
           },
           "check": {
             "linux": "command -v whisper",
             "darwin": "command -v whisper",
-            "win32": "where whisper"
+            "win32": "where whisper",
+            "termux": "command -v whisper"
           }
         },
         {
@@ -2677,11 +2844,13 @@
           "description": "CTranslate2 Whisper (8x faster)",
           "install": {
             "linux": "pipx install faster-whisper || uv pip install --system --break-system-packages faster-whisper",
-            "darwin": "pipx install faster-whisper || uv pip install --system --break-system-packages faster-whisper"
+            "darwin": "pipx install faster-whisper || uv pip install --system --break-system-packages faster-whisper",
+            "termux": "pip install faster-whisper"
           },
           "check": {
             "linux": "pip show faster-whisper",
-            "darwin": "pip show faster-whisper"
+            "darwin": "pip show faster-whisper",
+            "termux": "pip show faster-whisper"
           }
         },
         {
@@ -2690,11 +2859,13 @@
           "description": "Deep learning TTS toolkit",
           "install": {
             "linux": "pipx install TTS || uv pip install --system --break-system-packages TTS",
-            "darwin": "pipx install TTS || uv pip install --system --break-system-packages TTS"
+            "darwin": "pipx install TTS || uv pip install --system --break-system-packages TTS",
+            "termux": "pip install TTS"
           },
           "check": {
             "linux": "command -v tts",
-            "darwin": "command -v tts"
+            "darwin": "command -v tts",
+            "termux": "command -v tts"
           }
         },
         {
@@ -2703,11 +2874,13 @@
           "description": "Text-to-audio by Suno AI",
           "install": {
             "linux": "pipx install git+https://github.com/suno-ai/bark.git || uv pip install --system --break-system-packages git+https://github.com/suno-ai/bark.git",
-            "darwin": "pipx install git+https://github.com/suno-ai/bark.git || uv pip install --system --break-system-packages git+https://github.com/suno-ai/bark.git"
+            "darwin": "pipx install git+https://github.com/suno-ai/bark.git || uv pip install --system --break-system-packages git+https://github.com/suno-ai/bark.git",
+            "termux": "pip install git+https://github.com/suno-ai/bark.git"
           },
           "check": {
             "linux": "pip show bark",
-            "darwin": "pip show bark"
+            "darwin": "pip show bark",
+            "termux": "pip show bark"
           }
         },
         {
@@ -2716,11 +2889,13 @@
           "description": "Fast local TTS (Rust)",
           "install": {
             "linux": "pipx install piper-tts || uv pip install --system --break-system-packages piper-tts",
-            "darwin": "brew install piper"
+            "darwin": "brew install piper",
+            "termux": "pip install piper-tts"
           },
           "check": {
             "linux": "command -v piper",
-            "darwin": "command -v piper"
+            "darwin": "command -v piper",
+            "termux": "command -v piper"
           }
         },
         {
@@ -2729,11 +2904,13 @@
           "description": "OpenAI text-to-speech API",
           "install": {
             "linux": "(pipx install openai || uv pip install --system --break-system-packages openai)",
-            "darwin": "(pipx install openai || uv pip install --system --break-system-packages openai)"
+            "darwin": "(pipx install openai || uv pip install --system --break-system-packages openai)",
+            "termux": "pip install openai"
           },
           "check": {
             "linux": "pip show openai",
-            "darwin": "pip show openai"
+            "darwin": "pip show openai",
+            "termux": "pip show openai"
           }
         },
         {
@@ -2742,11 +2919,13 @@
           "description": "AI voice cloning & TTS",
           "install": {
             "linux": "pipx install elevenlabs || uv pip install --system --break-system-packages elevenlabs",
-            "darwin": "pipx install elevenlabs || uv pip install --system --break-system-packages elevenlabs"
+            "darwin": "pipx install elevenlabs || uv pip install --system --break-system-packages elevenlabs",
+            "termux": "pip install elevenlabs"
           },
           "check": {
             "linux": "pip show elevenlabs",
-            "darwin": "pip show elevenlabs"
+            "darwin": "pip show elevenlabs",
+            "termux": "pip show elevenlabs"
           }
         },
         {
@@ -2755,11 +2934,13 @@
           "description": "Coqui multilingual voice cloning TTS",
           "install": {
             "linux": "pipx install TTS || uv pip install --system --break-system-packages TTS",
-            "darwin": "pipx install TTS || uv pip install --system --break-system-packages TTS"
+            "darwin": "pipx install TTS || uv pip install --system --break-system-packages TTS",
+            "termux": "pip install TTS"
           },
           "check": {
             "linux": "command -v tts",
-            "darwin": "command -v tts"
+            "darwin": "command -v tts",
+            "termux": "command -v tts"
           }
         },
         {
@@ -2781,11 +2962,13 @@
           "description": "Fast offline TTS in multiple languages",
           "install": {
             "linux": "pipx install piper-tts || uv pip install --system --break-system-packages piper-tts",
-            "darwin": "pipx install piper-tts || uv pip install --system --break-system-packages piper-tts"
+            "darwin": "pipx install piper-tts || uv pip install --system --break-system-packages piper-tts",
+            "termux": "pip install piper-tts"
           },
           "check": {
             "linux": "command -v piper",
-            "darwin": "command -v piper"
+            "darwin": "command -v piper",
+            "termux": "command -v piper"
           }
         }
       ]

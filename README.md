@@ -1,22 +1,20 @@
 # Anything
 
-Bộ cài đặt môi trường phát triển tự động cho Linux, macOS, Windows. Chọn package qua GUI hoặc terminal — chạy 1 lần là có đầy đủ công cụ.
+Bộ cài đặt môi trường phát triển tự động cho Linux, macOS, Windows, Termux. Chọn package qua GUI hoặc terminal — chạy 1 lần là có đầy đủ công cụ.
 
 ![Python](https://img.shields.io/badge/python-3.13+-blue?logo=python&logoColor=white)
-![Platform](https://img.shields.io/badge/platform-Linux%20%7C%20macOS%20%7C%20Windows-94a3b8)
+![Platform](https://img.shields.io/badge/platform-Linux%20%7C%20macOS%20%7C%20Windows%20%7C%20Termux-94a3b8)
 ![Packages](https://img.shields.io/badge/packages-184-green)
 ![Categories](https://img.shields.io/badge/categories-21-blueviolet)
 
 ## Cài đặt nhanh
 
+### Desktop (Linux, macOS, Windows)
+
 ```bash
 git clone git@github.com:tran-minhta/Anything.git ~/Anything
 cd ~/Anything
-
-# Cài dependencies
 pip install PyQt6
-
-# Chạy GUI
 python gui.py
 ```
 
@@ -29,10 +27,21 @@ chmod +x setup.sh
 exec zsh
 ```
 
+### Termux (Android)
+
+```bash
+git clone https://github.com/tran-minhta/Anything.git
+cd Anything
+chmod +x setup_termux.sh
+./setup_termux.sh
+```
+
+Sau đó chạy `python gui.py` để chọn package cần cài.
+
 ## Yêu cầu
 
 - **Python** >= 3.13
-- **PyQt6** >= 6.6.0
+- **PyQt6** >= 6.6.0 (chỉ desktop — Termux dùng CLI mode)
 - **pipx** + **uv** (tự cài khi chạy base system)
 
 ## 3 cách sử dụng
@@ -85,10 +94,11 @@ Cài đặt **tất cả** package tự động, không cần chọn.
 
 ```
 Anything/
-├── gui.py              # GUI PyQt6 — giao diện đồ hoạ
+├── gui.py              # GUI PyQt6 — giao diện đồ hoạ (Termux: CLI mode)
 ├── installer.py        # Backend — xử lý cài đặt, sudo, version check
 ├── packages.json       # Danh sách 184 packages, 21 categories
 ├── setup.sh            # Cài tất cả (bash)
+├── setup_termux.sh     # Cài tất cả cho Termux
 ├── Option.sh           # Chọn cài theo y muốn (bash)
 ├── pyproject.toml      # Python project config
 ├── .zshrc              # Cau hinh ZSH (oh-my-zsh + p10k + plugins)
@@ -122,6 +132,27 @@ Anything/
 | **AI Media** | 5 | ComfyUI, Stable Diffusion, Upscayl... |
 | **Voice (TTS/STT)** | 10 | Whisper, Coqui TTS, Bark, ElevenLabs... |
 
+## Termux Support
+
+Anything hỗ trợ **Termux (Android)** với ~90 packages compatible. Terminal mode (CLI) được sử dụng tự động trên Termux vì PyQt6 không hỗ trợ Android.
+
+### Packages hỗ trợ trên Termux
+
+- **System**: base (zsh, tmux, curl, wget, git, build-essential, python...), ripgrep, fd, fzf, jq, bat, eza, starship, zoxide...
+- **Development**: Rust, Go, Node.js, Bun, pnpm, Deno, Java, CMake, GCC...
+- **Python**: uv, pipx, poetry
+- **AI**: 45+ packages (providers, agents, RAG, OCR, voice/TTS)
+
+### Packages KHÔNG hỗ trợ trên Termux
+
+- Docker, Docker Compose
+- VS Code, JetBrains IDEs (IntelliJ, PyCharm)
+- llama.cpp, Ollama, LM Studio
+- ComfyUI, Stable Diffusion, Upscayl
+- PostgreSQL, MySQL, Redis, MongoDB
+- Nginx, Caddy, Tailscale, Cloudflare Tunnel
+- Terraform, Ansible, Kubectl, Helm
+
 ## Cài đặt packages Python
 
 Mỗi package Python dùng cơ chế **2 lớp fallback**:
@@ -138,7 +169,8 @@ Ví dụ trong `packages.json`:
 ```json
 "install": {
   "linux": "pipx install aider-chat || uv pip install --system --break-system-packages aider-chat",
-  "darwin": "pipx install aider-chat || uv pip install --system --break-system-packages aider-chat"
+  "darwin": "pipx install aider-chat || uv pip install --system --break-system-packages aider-chat",
+  "termux": "pipx install aider-chat || uv pip install --break-system-packages aider-chat"
 }
 ```
 
@@ -152,6 +184,8 @@ Khi cài package cần root (VD: `sudo apt install`), GUI sẽ:
 2. Nếu cần password → hiện `QInputDialog` asking password
 3. Password được pipe qua `stdin` cho subprocess
 4. Không cần chạy GUI với `sudo`
+
+**Trên Termux**: không có sudo, các package dùng `pkg install` thay thế.
 
 ## Thêm/sửa package
 
@@ -171,12 +205,14 @@ Thêm block vào `packages.json`:
   "install": {
     "linux": "sudo apt install -y mytool",
     "darwin": "brew install mytool",
-    "win32": "winget install MyTool"
+    "win32": "winget install MyTool",
+    "termux": "pkg install -y mytool"
   },
   "check": {
     "linux": "command -v mytool",
     "darwin": "command -v mytool",
-    "win32": "where mytool"
+    "win32": "where mytool",
+    "termux": "command -v mytool"
   }
 }
 ```
@@ -198,9 +234,17 @@ Thêm block vào `packages.json`:
 Ghi vào `~/.commonrc`, dùng được trên cả bash lẫn zsh:
 
 ```bash
+# Desktop
 alias cat='batcat --paging=never'    # cat đẹp hơn
 alias ls='eza --icons'               # ls có icon
 alias ll='eza -lh --icons'           # ls chi tiết
+
+# Termux
+alias cat='bat --paging=never'       # bat (không phải batcat)
+alias ls='ls --color=auto'
+alias ll='ls -lh'
+
+# Chung
 alias gs='git status'
 alias gp='git push'
 alias gco='git checkout'
@@ -216,6 +260,9 @@ python gui.py
 
 # Cài tất cả qua bash
 ./setup.sh
+
+# Cài tất cả cho Termux
+./setup_termux.sh
 
 # Chọn cài theo số
 ./Option.sh

@@ -8,13 +8,23 @@ from pathlib import Path
 from typing import Callable, Optional
 
 
+def is_termux() -> bool:
+    return bool(
+        os.environ.get("TERMUX_VERSION")
+        or os.path.exists("/data/data/com.termux")
+        or "com.termux" in os.environ.get("PREFIX", "")
+    )
+
+
 class Installer:
     def __init__(self, json_path: str = None):
         if json_path is None:
             json_path = str(Path(__file__).parent / "packages.json")
         self.json_path = json_path
         self.system = platform.system().lower()
-        if self.system == "linux":
+        if is_termux():
+            self.platform_key = "termux"
+        elif self.system == "linux":
             self.platform_key = "linux"
         elif self.system == "darwin":
             self.platform_key = "darwin"
@@ -115,7 +125,7 @@ class Installer:
 
     def check_sudo(self) -> bool:
         """Check if sudo is available and passwordless."""
-        if self.platform_key == "win32":
+        if self.platform_key in ("win32", "termux"):
             return False
         try:
             result = subprocess.run(
@@ -127,6 +137,8 @@ class Installer:
 
     def needs_sudo_for_packages(self, pkg_ids: list[str]) -> list[str]:
         """Return list of package names that need sudo."""
+        if self.platform_key == "termux":
+            return []
         needed = []
         for pkg_id in pkg_ids:
             pkg = self.get_package(pkg_id)
@@ -217,7 +229,7 @@ class Installer:
         process = None
 
         use_sudo_stdin = False
-        if self._cmd_needs_sudo(cmd) and self._sudo_password:
+        if self.platform_key != "termux" and self._cmd_needs_sudo(cmd) and self._sudo_password:
             use_sudo_stdin = True
 
         try:
