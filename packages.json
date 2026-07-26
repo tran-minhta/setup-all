@@ -2114,8 +2114,8 @@
           "name": "Gemini CLI",
           "description": "Google Gemini in terminal",
           "install": {
-            "linux": "npm install -g @anthropic-ai/claude-code || npm install -g @google/gemini-cli",
-            "darwin": "npm install -g @anthropic-ai/claude-code || npm install -g @google/gemini-cli",
+            "linux": "npm install -g @google/gemini-cli",
+            "darwin": "npm install -g @google/gemini-cli",
             "win32": "winget install Google.GeminiCLI --accept-source-agreements --accept-package-agreements",
             "termux": "npm install -g @google/gemini-cli"
           },
@@ -2206,39 +2206,9 @@
           }
         },
         {
-          "id": "aider_diff",
-          "name": "aider --diff",
-          "description": "Aider in diff mode for git workflows",
-          "install": {
-            "linux": "pipx install aider-chat || uv pip install --system --break-system-packages aider-chat",
-            "darwin": "pipx install aider-chat || uv pip install --system --break-system-packages aider-chat",
-            "termux": "pip install aider-chat"
-          },
-          "check": {
-            "linux": "command -v aider",
-            "darwin": "command -v aider",
-            "termux": "command -v aider"
-          }
-        },
-        {
           "id": "sweep",
           "name": "Sweep AI",
           "description": "AI-powered bug fixer for GitHub issues",
-          "install": {
-            "linux": "pipx install sweepai || uv pip install --system --break-system-packages sweepai",
-            "darwin": "pipx install sweepai || uv pip install --system --break-system-packages sweepai",
-            "termux": "pip install sweepai"
-          },
-          "check": {
-            "linux": "pip show sweepai",
-            "darwin": "pip show sweepai",
-            "termux": "pip show sweepai"
-          }
-        },
-        {
-          "id": "sweep_dev",
-          "name": "Sweep Dev",
-          "description": "Sweep AI development tools",
           "install": {
             "linux": "pipx install sweepai || uv pip install --system --break-system-packages sweepai",
             "darwin": "pipx install sweepai || uv pip install --system --break-system-packages sweepai",

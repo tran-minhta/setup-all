@@ -80,8 +80,10 @@ grep -q '.bun/bin' ~/.bashrc 2>/dev/null || echo 'export PATH="$HOME/.bun/bin:$P
 
 # 9. CLI tools
 echo "[9/10] Installing CLI tools..."
-pkg install -y ripgrep fd glow imagemagick ffmpeg || true
-pip3 install --user yt-dlp || true
+for pkg_name in ripgrep fd glow imagemagick ffmpeg; do
+    pkg install -y "$pkg_name" 2>/dev/null || echo "Warning: $pkg_name failed to install, skipping..."
+done
+pip3 install --user yt-dlp 2>/dev/null || echo "Warning: yt-dlp failed to install, skipping..."
 
 # 10. Common aliases
 echo "[10/10] Setting up aliases..."

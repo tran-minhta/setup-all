@@ -4,7 +4,7 @@ Bộ cài đặt môi trường phát triển tự động cho Linux, macOS, Win
 
 ![Python](https://img.shields.io/badge/python-3.13+-blue?logo=python&logoColor=white)
 ![Platform](https://img.shields.io/badge/platform-Linux%20%7C%20macOS%20%7C%20Windows%20%7C%20Termux-94a3b8)
-![Packages](https://img.shields.io/badge/packages-184-green)
+![Packages](https://img.shields.io/badge/packages-182-green)
 ![Categories](https://img.shields.io/badge/categories-21-blueviolet)
 
 ## Cài đặt nhanh
@@ -96,7 +96,7 @@ Cài đặt **tất cả** package tự động, không cần chọn.
 Anything/
 ├── gui.py              # GUI PyQt6 — giao diện đồ hoạ (Termux/Proot: CLI mode)
 ├── installer.py        # Backend — xử lý cài đặt, sudo, version check
-├── packages.json       # Danh sách 184 packages, 21 categories
+├── packages.json       # Danh sách 182 packages, 21 categories
 ├── setup.sh            # Cài tất cả (bash - desktop)
 ├── setup_termux.sh     # Cài tất cả cho Termux
 ├── setup_proot.sh      # Cài tất cả cho proot-distro (Ubuntu)

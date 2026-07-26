@@ -14,7 +14,7 @@ if [ "$IS_TERMUX" = true ]; then
     alias ll='ls -lh'
 else
     # Desktop aliases
-    alias cat='batcat --paging=never'
+    alias cat='bat --paging=never'
     alias ls='eza --icons'
     alias ll='eza -lh --icons'
     # VM aliases

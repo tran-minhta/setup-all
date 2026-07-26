@@ -97,7 +97,8 @@ alias act='source ./.venv/bin/activate'
 alias deact='deactivate'
 EOF
             elif [ "$IS_TERMUX" = true ]; then
-                pkg update -y && pkg install -y zsh tmux fzf bat eza stow curl git build-essential unzip wget python openssh
+                pkg update -y && pkg install -y zsh tmux fzf bat stow curl git build-essential unzip wget python openssh || true
+                pkg install -y eza 2>/dev/null || true
                 touch ~/.commonrc
                 for rc in ~/.bashrc; do
                     if ! grep -q "source ~/.commonrc" "$rc" 2>/dev/null; then echo "[ -f ~/.commonrc ] && source ~/.commonrc" >> "$rc"; fi
