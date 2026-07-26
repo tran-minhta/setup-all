@@ -224,8 +224,12 @@ def run_gui_mode():
             self._stop = False
 
         def run(self):
-            ok = self.installer.install(self.pkg_ids, callback=self._on_progress)
-            self.finished_signal.emit(ok)
+            try:
+                ok = self.installer.install(self.pkg_ids, callback=self._on_progress)
+                self.finished_signal.emit(ok)
+            except Exception as e:
+                self.progress.emit(-1, f"[FATAL] Install crashed: {e}")
+                self.finished_signal.emit(False)
 
         def _on_progress(self, percent, message):
             if not self._stop:

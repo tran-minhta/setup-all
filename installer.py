@@ -196,49 +196,63 @@ class Installer:
     ) -> bool:
         total = len(pkg_ids)
         success_count = 0
+        failed_pkgs: list[str] = []
 
         for i, pkg_id in enumerate(pkg_ids):
-            pkg = self.get_package(pkg_id)
-            if pkg is None:
-                if callback:
-                    callback(self._progress(i, total), f"[SKIP] Not found: {pkg_id}")
-                continue
+            try:
+                pkg = self.get_package(pkg_id)
+                if pkg is None:
+                    if callback:
+                        callback(self._progress(i, total), f"[SKIP] Not found: {pkg_id}")
+                    continue
 
-            if self.is_installed(pkg_id):
+                if self.is_installed(pkg_id):
+                    success_count += 1
+                    ver = self.get_installed_version(pkg_id)
+                    ver_str = f" (v{ver})" if ver else ""
+                    if callback:
+                        callback(self._progress(i, total), f"[SKIP] Already installed: {pkg['name']}{ver_str}")
+                    continue
+
+                if callback:
+                    callback(self._progress(i, total), f"[...] Installing: {pkg['name']}")
+
+                install_cmds = pkg.get("install", {})
+                cmd = install_cmds.get(self.platform_key)
+                if not cmd:
+                    if callback:
+                        callback(self._progress(i, total), f"[SKIP] Not supported on {self.platform_key}: {pkg['name']}")
+                    continue
+
+                ok = self._run_cmd(cmd, callback, f"  {pkg['name']}")
+                if not ok:
+                    failed_pkgs.append(pkg['name'])
+                    if callback:
+                        callback(self._progress(i, total), f"[FAIL] Failed: {pkg['name']} - skipped, continuing...")
+                    continue
+
+                post = pkg.get("post_install", {})
+                post_cmd = post.get(self.platform_key)
+                if post_cmd:
+                    post_ok = self._run_cmd(post_cmd, callback, f"  Post-install {pkg['name']}")
+                    if not post_ok:
+                        if callback:
+                            callback(self._progress(i, total), f"[WARN] Post-install failed: {pkg['name']} (main install OK)")
+
                 success_count += 1
-                ver = self.get_installed_version(pkg_id)
-                ver_str = f" (v{ver})" if ver else ""
                 if callback:
-                    callback(self._progress(i, total), f"[SKIP] Already installed: {pkg['name']}{ver_str}")
-                continue
+                    callback(self._progress(i, total), f"[OK] Done: {pkg['name']}")
 
-            if callback:
-                callback(self._progress(i, total), f"[...] Installing: {pkg['name']}")
-
-            install_cmds = pkg.get("install", {})
-            cmd = install_cmds.get(self.platform_key)
-            if not cmd:
+            except Exception as e:
+                failed_pkgs.append(pkg_id)
                 if callback:
-                    callback(self._progress(i, total), f"[SKIP] Not supported on {self.platform_key}: {pkg['name']}")
-                continue
-
-            ok = self._run_cmd(cmd, callback, f"  {pkg['name']}")
-            if not ok:
-                if callback:
-                    callback(self._progress(i, total), f"[FAIL] Failed: {pkg['name']}")
-                continue
-
-            post = pkg.get("post_install", {})
-            post_cmd = post.get(self.platform_key)
-            if post_cmd:
-                self._run_cmd(post_cmd, callback, f"  Post-install {pkg['name']}")
-
-            success_count += 1
-            if callback:
-                callback(self._progress(i, total), f"[OK] Done: {pkg['name']}")
+                    callback(self._progress(i, total), f"[ERROR] Unexpected error on {pkg_id}: {e} - skipped, continuing...")
 
         if callback:
-            callback(100, f"Finished! Installed {success_count}/{total} packages.")
+            if failed_pkgs:
+                callback(100, f"Finished! Installed {success_count}/{total} packages. Failed: {', '.join(failed_pkgs)}")
+            else:
+                callback(100, f"Finished! All {success_count}/{total} packages installed successfully.")
 
         return success_count == total
 
@@ -339,7 +353,14 @@ class Installer:
                     if callback:
                         callback(-1, f"{prefix} | {data}")
 
-            process.wait(timeout=30)
+            try:
+                process.wait(timeout=30)
+            except subprocess.TimeoutExpired:
+                process.kill()
+                process.wait()
+                if callback:
+                    callback(-1, f"{prefix} | TIMEOUT: process did not exit after 30s, killed")
+                return False
             return process.returncode == 0
 
         except subprocess.TimeoutExpired:
